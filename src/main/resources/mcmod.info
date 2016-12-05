@@ -1,0 +1,25 @@
+{
+  	"modListVersion": 2,
+  	"modList": [
+  			{
+  				"modid": "beneath",
+  				"name": "The Beneath",
+  				"description": "A mining dimension, or a manifestation of torment? Those who are unworthy will be claimed by the darkness.",
+  				"mcversion": "${mcversion}",
+  				"version": "${version}",
+  				"authorList": [
+  						"shinoow", "Darkosto"
+  				],
+  				"credits": "Funwayguy & GenDeathrow (dimension terrain based off of Enviromine code)",
+  				"dependants": [  ],
+				"dependencies": [  ],
+				"parent": "",
+				"requiredMods": [  ],
+				"logoFile": "assets/beneath/textures/logo.png",
+				"screenshots": [  ],
+				"updateUrl": "https://minecraft.curseforge.com/projects/the-beneath",
+  				"url": "https://minecraft.curseforge.com/projects/the-beneath",
+ 				"useDependencyInformation": true
+			}
+	]
+}

@@ -1,0 +1,9 @@
+# Eclipse
+.project
+.classpath
+.metadata
+org.*
+bin
+
+# Windows image file caches
+Thumbs.db

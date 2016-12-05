@@ -1,0 +1,16 @@
+# Text related stuff
+* text eol=lf
+*.bat text eol=crlf
+*.java text eol=lf
+*.gradle text eol=crlf
+
+# Binary stuff
+*.dat binary
+*.bin binary
+*.png binary
+*.exe binary
+*.dll binary
+*.zip binary
+*.jar binary
+*.7z binary
+*.db binary

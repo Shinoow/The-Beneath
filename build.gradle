@@ -1,0 +1,121 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+		maven {
+            // Required for the curseforge task
+            name = "gradle"
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+		classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.5"
+    }
+}
+apply plugin: 'java'
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'com.matthewprenger.cursegradle'
+
+ext.propFile = file "build.properties"
+
+propFile.withReader {
+	
+	def prop = new Properties()
+	prop.load(it)
+	project.ext.props = new ConfigSlurper().parse prop
+}
+
+version = props.beneath_version
+group= "com.shinoow.beneath" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "The Beneath"
+
+sourceCompatibility = targetCompatibility = "1.8"
+compileJava {
+    sourceCompatibility = targetCompatibility = "1.8"
+}
+
+minecraft {
+    version = "1.10.2-12.18.1.2073"
+    runDir = "run"
+
+    mappings = "snapshot_20160518"
+    makeObfSourceJar = false
+
+	replaceIn "Beneath.java"
+            replace "forgeversion", props.forge_version
+}
+
+dependencies {
+   
+}
+
+version = "${props.mc_version}-${props.beneath_version}"
+
+processResources
+{
+	// I really don't want that file to exist anywhere
+	exclude '**/Thumbs.db'
+
+	// this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+	
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+		include 'version.properties'
+
+        // replace version and mcversion
+        expand ([
+			'version':project.version,
+			'beneathversion':project.props.beneath_version,
+			'mcversion':project.props.mc_version,
+			'forgeversion':project.props.forge_version
+		])
+    }
+        
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+		exclude 'version.properties'
+    }
+}
+	
+	task srcJar(type: Jar) {
+    from sourceSets.main.allSource
+	
+	extension = 'jar'
+	classifier = 'src'
+}
+
+	task devJar(type: Jar, dependsOn: 'classes') {
+    from(sourceSets.main.output) {
+        include '**'
+    }
+
+    extension = 'jar'
+    classifier = 'dev'
+}
+	artifacts {
+    archives srcJar, devJar
+}
+
+curseforge {
+    apiKey = project.hasProperty('curseForgeApiKey') ? project.curseForgeApiKey : '' // gradle curse -Pcurseforge_key=your-api-key
+	project{
+		id = "254629" // http://minecraft.curseforge.com/mc-mods/"xxxxxx"-projectname
+		releaseType = project.props.release_type //alpha beta release
+		changelogType = 'html'
+		changelog = new File('changelog.html') //must have at least an empty string
+		addArtifact devJar
+		addArtifact srcJar
+
+		relations {
+			requiredLibrary 'grue'
+		}
+	}
+}

@@ -1,0 +1,117 @@
+{
+	"beneath.normal": {
+		"category": "hostile",
+		"sounds": [
+			"beneath:beneath/normal1",
+			"beneath:beneath/normal2",
+			"beneath:beneath/normal3",
+			"beneath:beneath/normal4",
+			"beneath:beneath/normal5",
+			"beneath:beneath/normal6",
+			"beneath:beneath/normal7",
+			"beneath:beneath/normal8",
+			"beneath:beneath/normal9",
+			"beneath:beneath/normal10",
+			"beneath:beneath/normal11",
+			"beneath:beneath/normal12"
+		],
+		"subtitle": "subtitle.beneath.beneath.normal"
+	},
+	"beneath.muffled": {
+		"category": "hostile",
+		"sounds": [
+			"beneath:beneath/muffled1",
+			"beneath:beneath/muffled2",
+			"beneath:beneath/muffled3",
+			"beneath:beneath/muffled4",
+			"beneath:beneath/muffled5",
+			"beneath:beneath/muffled6",
+			"beneath:beneath/muffled7",
+			"beneath:beneath/muffled8",
+			"beneath:beneath/muffled9",
+			"beneath:beneath/muffled10",
+			"beneath:beneath/muffled11",
+			"beneath:beneath/muffled12"
+		],
+		"subtitle": "subtitle.beneath.beneath.muffled"
+	},
+	"beneath.drawnout": {
+		"category": "hostile",
+		"sounds": [
+			"beneath:beneath/drawnout1",
+			"beneath:beneath/drawnout2",
+			"beneath:beneath/drawnout3",
+			"beneath:beneath/drawnout4",
+			"beneath:beneath/drawnout5",
+			"beneath:beneath/drawnout6",
+			"beneath:beneath/drawnout7",
+			"beneath:beneath/drawnout8",
+			"beneath:beneath/drawnout9",
+			"beneath:beneath/drawnout10",
+			"beneath:beneath/drawnout11",
+			"beneath:beneath/drawnout12"
+		],
+		"subtitle": "subtitle.beneath.beneath.drawnout"
+	},
+	"deepdank": {
+		"category": "hostile",
+		"sounds": [
+			"beneath:dank/deepdank1",
+			"beneath:dank/deepdank2",
+			"beneath:dank/deepdank3",
+			"beneath:dank/deepdank4",
+			"beneath:dank/deepdank5",
+			"beneath:dank/deepdank6",
+			"beneath:dank/deepdank7",
+			"beneath:dank/deepdank8",
+			"beneath:dank/deepdank9",
+			"beneath:dank/deepdank10",
+			"beneath:dank/deepdank11",
+			"beneath:dank/deepdank12"
+		],
+		"subtitle": "subtitle.beneath.deepdank"
+	},
+	"dark1": {
+		"category": "hostile",
+		"sounds": [
+			"beneath:dark/darkbday1",
+			"beneath:dark/darkbday2",
+			"beneath:dark/darkbday3",
+			"beneath:dark/darkbday4",
+			"beneath:dark/darkbday5",
+			"beneath:dark/darkbday6",
+			"beneath:dark/darkbday7",
+			"beneath:dark/darkbday8",
+			"beneath:dark/darkbday9",
+			"beneath:dark/darkbday10",
+			"beneath:dark/darkbday11",
+			"beneath:dark/darkbday12"
+		],
+		"subtitle": "subtitle.beneath.dark1"
+	},
+	"dark2": {
+		"category": "hostile",
+		"sounds": [
+			"beneath:dark/notdarkbday1",
+			"beneath:dark/notdarkbday2",
+			"beneath:dark/notdarkbday3",
+			"beneath:dark/notdarkbday4",
+			"beneath:dark/notdarkbday5",
+			"beneath:dark/notdarkbday6",
+			"beneath:dark/notdarkbday7",
+			"beneath:dark/notdarkbday8",
+			"beneath:dark/notdarkbday9",
+			"beneath:dark/notdarkbday10",
+			"beneath:dark/notdarkbday11",
+			"beneath:dark/notdarkbday12"
+		],
+		"subtitle": "subtitle.beneath.dark2"
+	},
+	"scream": {
+		"category": "hostile",
+		"sounds": [
+			"beneath:scream"
+		],
+		"subtitle": "subtitle.beneath.scream"
+	}
+}
