@@ -40,8 +40,8 @@ public class BeneathEventHandler {
 			IAttributeInstance health = ((EntityMob)event.getEntity()).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
 			UUID uuid1 = UUID.fromString("648D7064-6A60-4F59-8ABE-C2C23A6DD7A9");
 			UUID uuid2 = UUID.fromString("5D6F0BA2-1186-46AC-B896-C61C5CEE99CC");
-			AttributeModifier dmg = new AttributeModifier(uuid1, "The Beneath Attack Damage Boost", damage.getAttributeValue(), 0);
-			AttributeModifier hp = new AttributeModifier(uuid2, "The Beneath Health Boost", health.getAttributeValue(), 0);
+			AttributeModifier dmg = new AttributeModifier(uuid1, "The Beneath Attack Damage Boost", damage.getBaseValue(), 0);
+			AttributeModifier hp = new AttributeModifier(uuid2, "The Beneath Health Boost", health.getBaseValue(), 0);
 			damage.removeModifier(dmg);
 			damage.applyModifier(dmg);
 			health.removeModifier(hp);

@@ -1,5 +1,6 @@
 package com.shinoow.beneath.common.world.gen;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -234,7 +235,7 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 		genDankCaves.generate(world, x, z, chunkprimer);
 
 		Chunk chunk = new Chunk(world, chunkprimer, x, z);
-		Biome[] abiome = world.getBiomeProvider().loadBlockGeneratorData((Biome[])null, x * 16, z * 16, 16, 16);
+		Biome[] abiome = world.getBiomeProvider().getBiomes((Biome[])null, x * 16, z * 16, 16, 16);
 		byte[] abyte = chunk.getBiomeArray();
 
 		for (int i = 0; i < abyte.length; ++i)
@@ -425,8 +426,8 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 	@Override
 	public List<Biome.SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos)
 	{
-
-		Biome biome = world.getBiomeGenForCoords(pos);
+		if(Beneath.disableMobSpawning) return Collections.EMPTY_LIST;
+		Biome biome = world.getBiome(pos);
 		return biome.getSpawnableList(creatureType);
 	}
 

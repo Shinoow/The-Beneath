@@ -35,10 +35,10 @@ import com.shinoow.beneath.common.network.PacketDispatcher;
 import com.shinoow.beneath.common.world.WorldProviderDeepDank;
 import com.shinoow.beneath.common.world.biome.BiomeDeepDank;
 
-@Mod(modid = Beneath.modid, name = Beneath.name, version = Beneath.version, dependencies = "required-after:Forge@[forgeversion,);required-after:grue@[1.3.3,)", acceptedMinecraftVersions = "[1.10.2]", guiFactory = "com.shinoow.beneath.client.config.BeneathGuiFactory", useMetadata = false, updateJSON = "https://raw.githubusercontent.com/Shinoow/The-Beneath/master/version.json")
+@Mod(modid = Beneath.modid, name = Beneath.name, version = Beneath.version, dependencies = "required-after:Forge@[forgeversion,);after:grue@[1.3.3,)", acceptedMinecraftVersions = "[1.10.2]", guiFactory = "com.shinoow.beneath.client.config.BeneathGuiFactory", useMetadata = false, updateJSON = "https://raw.githubusercontent.com/Shinoow/The-Beneath/master/version.json")
 public class Beneath {
 
-	public static final String version = "1.0.0";
+	public static final String version = "1.1.0";
 	public static final String modid = "beneath";
 	public static final String name = "The Beneath";
 
@@ -56,9 +56,9 @@ public class Beneath {
 
 	static int startEntityId = 200;
 
-	public static int dim, darkTimer, darkDamage, dungeonChance;
+	public static int dim, darkTimer, darkDamage, dungeonChance, shadowSpawnWeight;
 	public static String mode;
-	public static boolean internalOreGen, keepLoaded, dimTeleportation;
+	public static boolean internalOreGen, keepLoaded, dimTeleportation, disableMobSpawning;
 
 	public static Biome deep_dank;
 
@@ -140,16 +140,22 @@ public class Beneath {
 	private static void syncConfig(){
 
 		dim = cfg.get(Configuration.CATEGORY_GENERAL, "Dimension ID", 10, "Dimension ID for The Beneath.").getInt();
-		mode = cfg.get(Configuration.CATEGORY_GENERAL, "Mode", "grue", "What mode The Beneath is set to. Current modes are:\ngrue: Grues spawn in the darkness\ndarkness: You take damage while in dark areas.\n§c[Minecraft Restart Required]§r").getString();
+		mode = cfg.get(Configuration.CATEGORY_GENERAL, "Mode", Loader.isModLoaded("grue") ? "grue" : "darkness", "What mode The Beneath is set to. Current modes are:\ngrue: Grues spawn in the darkness\ndarkness: You take damage while in dark areas.\n§c[Minecraft Restart Required]§r").getString();
 		internalOreGen = cfg.get(Configuration.CATEGORY_GENERAL, "Internal Ore Generator", true, "Toggles whether or not to use the built-in Ore Generator. Can be disabled if you have another mod that handles Ore Generation.\n§c[Minecraft Restart Required]§r").getBoolean();
 		keepLoaded = cfg.get(Configuration.CATEGORY_GENERAL, "Keep Loaded", false, "Toggles whether or not The Beneath should be prevented from automatically unloading (might affect performance if enabled).\n§c[Minecraft Restart Required]§r").getBoolean();
 		dimTeleportation = cfg.get(Configuration.CATEGORY_GENERAL, "Additional Dimension Teleportation", false, "Toggles whether or not to allow teleporting back and forth between the Beneath and dimensions that aren't the Overworld").getBoolean();
 		darkTimer = cfg.get(Configuration.CATEGORY_GENERAL, "Darkness damage timer", 5, "The amount of seconds before the darkness damages you (when the mode is set to darkness).\n[range: 1 ~ 10, default: 5]", 1, 10).getInt();
 		darkDamage = cfg.get(Configuration.CATEGORY_GENERAL, "Darkness damage", 2, "The amount of damage (half hearts) you take from the darkness (when the mode is set to darkness).\n[range: 2 ~ 20, default: 2]", 2, 20).getInt();
 		dungeonChance = cfg.get(Configuration.CATEGORY_GENERAL, "Dungeon spawn chance", 8, "The chance that a dungeon generates in The Beneath (same logic as the vanilla setting). Setting it to 0 stops dungeon generation.\n[range: 0 ~ 100, default: 8]", 0, 100).getInt();
+		shadowSpawnWeight = cfg.get(Configuration.CATEGORY_GENERAL, "Shadow Spawn Weight", 50, "Spawn Weight for the shadows, increase to increase the chance of them spawning, or decrease to decrease the chance of them spawning.\n[range: 10 ~ 100, default: 50]", 10, 100).getInt();
+		disableMobSpawning = cfg.get(Configuration.CATEGORY_GENERAL, "Disable Mob Spawning", false, "Toggles whether or not to stop mob spawning inside The Beneath.").getBoolean();
 
 		darkTimer = MathHelper.clamp_int(darkTimer, 1, 10);
 		darkDamage = MathHelper.clamp_int(darkDamage, 2, 20);
+		shadowSpawnWeight = MathHelper.clamp_int(shadowSpawnWeight, 10, 100);
+
+		if(mode.equalsIgnoreCase("grue") && !Loader.isModLoaded("grue"))
+			mode = "darkness";
 
 		if(cfg.hasChanged())
 			cfg.save();
