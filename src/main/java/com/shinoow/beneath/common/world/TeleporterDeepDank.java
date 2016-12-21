@@ -53,11 +53,11 @@ public class TeleporterDeepDank extends Teleporter {
 			if(movementFactor > 1){
 				double x = pos.getX() > entity.posX ? pos.getX() - 0.5 : pos.getX() + 1.5;
 				double z = pos.getZ() > entity.posZ ? pos.getZ() - 0.5 : pos.getZ() + 1.5;
-				entity.setPositionAndUpdate(MathHelper.floor_double(x), MathHelper.floor_double(entity.posY), MathHelper.floor_double(z));
+				entity.setPositionAndUpdate(MathHelper.floor(x), MathHelper.floor(entity.posY), MathHelper.floor(z));
 			}
 			if(entity.dimension == 1) entity.setPositionAndUpdate(pos.getX(), pos.getY() + 1, pos.getZ());
 		}
-		entity.setPosition(MathHelper.floor_double(entity.posX), MathHelper.floor_double(entity.posY), MathHelper.floor_double(entity.posZ));
+		entity.setPosition(MathHelper.floor(entity.posX), MathHelper.floor(entity.posY), MathHelper.floor(entity.posZ));
 		entity.motionX = entity.motionY = entity.motionZ = 0;
 		if(entity.dimension == Beneath.dim)
 			worldServer.playSound(null, entity.getPosition(), getSound(entity, worldServer.rand), SoundCategory.HOSTILE, 1, 1);

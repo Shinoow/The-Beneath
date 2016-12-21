@@ -35,7 +35,7 @@ import com.shinoow.beneath.common.network.PacketDispatcher;
 import com.shinoow.beneath.common.world.WorldProviderDeepDank;
 import com.shinoow.beneath.common.world.biome.BiomeDeepDank;
 
-@Mod(modid = Beneath.modid, name = Beneath.name, version = Beneath.version, dependencies = "required-after:Forge@[forgeversion,);after:grue@[1.3.3,)", acceptedMinecraftVersions = "[1.10.2]", guiFactory = "com.shinoow.beneath.client.config.BeneathGuiFactory", useMetadata = false, updateJSON = "https://raw.githubusercontent.com/Shinoow/The-Beneath/master/version.json")
+@Mod(modid = Beneath.modid, name = Beneath.name, version = Beneath.version, dependencies = "required-after:forge@[forgeversion,);after:grue@[1.3.3,)", acceptedMinecraftVersions = "[1.11]", guiFactory = "com.shinoow.beneath.client.config.BeneathGuiFactory", useMetadata = false, updateJSON = "https://raw.githubusercontent.com/Shinoow/The-Beneath/master/version.json")
 public class Beneath {
 
 	public static final String version = "1.1.0";
@@ -87,7 +87,7 @@ public class Beneath {
 
 		GameRegistry.register(deep_dank.setRegistryName(new ResourceLocation(modid, "the_beneath")));
 
-		BiomeDictionary.registerBiomeType(deep_dank, Type.DEAD);
+		BiomeDictionary.addTypes(deep_dank, Type.DEAD);
 
 		deep_dank_dim = DimensionType.register("The Beneath", "_tb", dim, WorldProviderDeepDank.class, keepLoaded);
 
@@ -109,7 +109,7 @@ public class Beneath {
 		scream = GameRegistry.register(new SoundEvent(new ResourceLocation(modid, "scream")).setRegistryName(new ResourceLocation(modid, "scream")));
 
 		registerEntityWithEgg(EntityShadow.class, "shadow", 1, 80, 3, true, 0, 0);
-		EntityRegistry.registerModEntity(EntityHand.class, "hand", 2, instance, 80, 3, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(modid, "hand"), EntityHand.class, "hand", 2, instance, 80, 3, true);
 		if(mode.equalsIgnoreCase("grue"))
 			FMLInterModComms.sendMessage("grue", "registerDimensionWhitelistOverride", String.valueOf(dim));
 		PacketDispatcher.registerPackets();
@@ -150,9 +150,9 @@ public class Beneath {
 		shadowSpawnWeight = cfg.get(Configuration.CATEGORY_GENERAL, "Shadow Spawn Weight", 50, "Spawn Weight for the shadows, increase to increase the chance of them spawning, or decrease to decrease the chance of them spawning.\n[range: 10 ~ 100, default: 50]", 10, 100).getInt();
 		disableMobSpawning = cfg.get(Configuration.CATEGORY_GENERAL, "Disable Mob Spawning", false, "Toggles whether or not to stop mob spawning inside The Beneath.").getBoolean();
 
-		darkTimer = MathHelper.clamp_int(darkTimer, 1, 10);
-		darkDamage = MathHelper.clamp_int(darkDamage, 2, 20);
-		shadowSpawnWeight = MathHelper.clamp_int(shadowSpawnWeight, 10, 100);
+		darkTimer = MathHelper.clamp(darkTimer, 1, 10);
+		darkDamage = MathHelper.clamp(darkDamage, 2, 20);
+		shadowSpawnWeight = MathHelper.clamp(shadowSpawnWeight, 10, 100);
 
 		if(mode.equalsIgnoreCase("grue") && !Loader.isModLoaded("grue"))
 			mode = "darkness";
@@ -161,19 +161,9 @@ public class Beneath {
 			cfg.save();
 	}
 
-	private static int getUniqueEntityId() {
-		do
-			startEntityId++;
-		while (EntityList.ID_TO_CLASS.containsKey(startEntityId));
-
-		return startEntityId;
-	}
-
 	@SuppressWarnings("unchecked")
 	private static void registerEntityWithEgg(Class<? extends Entity> entity, String name, int modid, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates, int primaryColor, int secondaryColor) {
-		int id = getUniqueEntityId();
-		EntityRegistry.registerModEntity(entity, name, modid, instance, trackingRange, updateFrequency, sendsVelocityUpdates, primaryColor, secondaryColor);
-		EntityList.ID_TO_CLASS.put(id, entity);
+		EntityRegistry.registerModEntity(new ResourceLocation("beneath", name), entity, "beneath."+name, modid, instance, trackingRange, updateFrequency, sendsVelocityUpdates, primaryColor, secondaryColor);
 	}
 
 	private String getSupporterList(){

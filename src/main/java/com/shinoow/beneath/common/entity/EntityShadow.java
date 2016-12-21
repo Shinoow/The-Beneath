@@ -93,19 +93,19 @@ public class EntityShadow extends EntityMob {
 	public void onLivingUpdate()
 	{
 		if(dimension != Beneath.dim)
-			worldObj.removeEntity(this);
+			world.removeEntity(this);
 
 		if (cooldown > 0)
 			cooldown--;
-		if (!worldObj.isRemote && cooldown <= 0 && rand.nextBoolean()) {
-			List<EntityPlayer> players = worldObj.getEntitiesWithinAABB(EntityPlayer.class, getEntityBoundingBox().expand(16, 16, 16));
+		if (!world.isRemote && cooldown <= 0 && rand.nextBoolean()) {
+			List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, getEntityBoundingBox().expand(16, 16, 16));
 			if(!players.isEmpty())
 				for(EntityPlayer target : players)
-					if (target != null && !target.capabilities.isCreativeMode && worldObj.getLight(target.getPosition()) >= 5) {
+					if (target != null && !target.capabilities.isCreativeMode && world.getLight(target.getPosition()) >= 5) {
 						float distanceSq = (float)getDistanceSqToEntity(target);
 						if (distanceSq > 9.0F && distanceSq < 100.0F && getEntitySenses().canSee(target)) {
-							new EntityHand(worldObj, this, target);
-							worldObj.spawnEntityInWorld(getHand());
+							new EntityHand(world, this, target);
+							world.spawnEntity(getHand());
 							cooldown = 200 + rand.nextInt(32);
 							break;
 						}
@@ -142,7 +142,7 @@ public class EntityShadow extends EntityMob {
 		posZ = z;
 		boolean flag = false;
 		BlockPos blockpos = new BlockPos(this);
-		World world = worldObj;
+		World world = this.world;
 		getRNG();
 
 		if (world.isBlockLoaded(blockpos))
@@ -194,7 +194,7 @@ public class EntityShadow extends EntityMob {
 		livingdata = super.onInitialSpawn(difficulty, livingdata);
 
 		if(dimension != Beneath.dim)
-			worldObj.removeEntity(this);
+			world.removeEntity(this);
 
 		cooldown = rand.nextInt(200);
 

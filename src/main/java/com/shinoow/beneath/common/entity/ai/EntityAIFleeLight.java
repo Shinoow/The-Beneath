@@ -26,7 +26,7 @@ public class EntityAIFleeLight extends EntityAIBase
 	{
 		theCreature = theCreatureIn;
 		movementSpeed = movementSpeedIn;
-		theWorld = theCreatureIn.worldObj;
+		theWorld = theCreatureIn.world;
 		setMutexBits(1);
 	}
 
@@ -69,7 +69,7 @@ public class EntityAIFleeLight extends EntityAIBase
 	@Override
 	public void startExecuting()
 	{
-		theCreature.worldObj.playSound(null, theCreature.getPosition(), Beneath.scream, SoundCategory.HOSTILE, 1, 1);
+		theCreature.world.playSound(null, theCreature.getPosition(), Beneath.scream, SoundCategory.HOSTILE, 1, 1);
 		theCreature.getNavigator().tryMoveToXYZ(shelterX, shelterY, shelterZ, movementSpeed);
 	}
 

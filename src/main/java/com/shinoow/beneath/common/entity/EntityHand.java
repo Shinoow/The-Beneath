@@ -42,7 +42,7 @@ public class EntityHand extends Entity {
 		motionX = (target.posX - entity.posX) * 0.7;
 		motionY = (target.posY + target.getEyeHeight() - 0.7 - posY) * 0.7;
 		motionZ = (target.posZ - entity.posZ) * 0.7;
-		double vH = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ);
+		double vH = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
 		if (vH >= 1E-7) {
 			rotationYaw = (float)(Math.atan2(motionZ, motionX) * 180.0 / Math.PI) - 90.0F;
 			rotationPitch = (float)(-Math.atan2(motionY, vH) * 180.0 / Math.PI);
@@ -50,7 +50,7 @@ public class EntityHand extends Entity {
 			double dZ = motionZ / vH;
 			setLocationAndAngles(entity.posX + dX, posY, entity.posZ + dZ, rotationYaw, rotationPitch);
 			//            this.yOffset = 0.0F;
-			calculateVelocity(motionX, motionY + vH * 0.2, motionZ, 1.0F, 14 - (worldObj.getDifficulty().getDifficultyId() << 2));
+			calculateVelocity(motionX, motionY + vH * 0.2, motionZ, 1.0F, 14 - (world.getDifficulty().getDifficultyId() << 2));
 		}
 		updateAnglerId();
 	}
@@ -78,7 +78,7 @@ public class EntityHand extends Entity {
 	}
 
 	public void calculateVelocity(double vX, double vY, double vZ, float v, float variance) {
-		float vi = MathHelper.sqrt_double(vX * vX + vY * vY + vZ * vZ);
+		float vi = MathHelper.sqrt(vX * vX + vY * vY + vZ * vZ);
 		vX /= vi;
 		vY /= vi;
 		vZ /= vi;
@@ -91,7 +91,7 @@ public class EntityHand extends Entity {
 		motionX = vX;
 		motionY = vY;
 		motionZ = vZ;
-		float vH = MathHelper.sqrt_double(vX * vX + vZ * vZ);
+		float vH = MathHelper.sqrt(vX * vX + vZ * vZ);
 		prevRotationYaw = rotationYaw = (float)(Math.atan2(vX, vZ) * 180.0 / Math.PI);
 		prevRotationPitch = rotationPitch = (float)(Math.atan2(vY, vH) * 180.0 / Math.PI);
 	}
@@ -102,7 +102,7 @@ public class EntityHand extends Entity {
 		motionY = vY;
 		motionZ = vZ;
 		if (prevRotationPitch == 0.0F && prevRotationYaw == 0.0F) {
-			float vH = MathHelper.sqrt_double(vX * vX + vZ * vZ);
+			float vH = MathHelper.sqrt(vX * vX + vZ * vZ);
 			prevRotationYaw = rotationYaw = (float)(Math.atan2(vX, vZ) * 180.0 / Math.PI);
 			prevRotationPitch = rotationPitch = (float)(Math.atan2(vY, vH) * 180.0 / Math.PI);
 		}
@@ -114,18 +114,18 @@ public class EntityHand extends Entity {
 		lastTickPosY = posY;
 		lastTickPosZ = posZ;
 		super.onUpdate();
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			if (shadow == null || shadow.isDead || getDistanceSqToEntity(shadow) > 1024.0)
 				setDead();
 			Vec3d posVec = new Vec3d(posX, posY, posZ);
 			Vec3d motionVec = new Vec3d(posX + motionX, posY + motionY, posZ + motionZ);
-			RayTraceResult object = worldObj.rayTraceBlocks(posVec, motionVec);
+			RayTraceResult object = world.rayTraceBlocks(posVec, motionVec);
 			posVec = new Vec3d(posX, posY, posZ);
 			motionVec = new Vec3d(posX + motionX, posY + motionY, posZ + motionZ);
 			if (object != null)
 				motionVec = new Vec3d(object.hitVec.xCoord, object.hitVec.yCoord, object.hitVec.zCoord);
 			Entity entityHit = null;
-			List entitiesInPath = worldObj.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().addCoord(motionX, motionY, motionZ).expand(1.0, 1.0, 1.0));
+			List entitiesInPath = world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().addCoord(motionX, motionY, motionZ).expand(1.0, 1.0, 1.0));
 			double d = Double.POSITIVE_INFINITY;
 			for (int i = 0; i < entitiesInPath.size(); i++) {
 				Entity entityInPath = (Entity) entitiesInPath.get(i);
@@ -147,14 +147,14 @@ public class EntityHand extends Entity {
 				onImpact(object);
 		}
 		else if (shadow == null) {
-			Entity entity = worldObj.getEntityByID(getShadowId());
+			Entity entity = world.getEntityByID(getShadowId());
 			if (entity instanceof EntityShadow)
 				shadow = (EntityShadow) entity;
 		}
 		posX += motionX;
 		posY += motionY;
 		posZ += motionZ;
-		float var16 = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ);
+		float var16 = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
 		rotationYaw = (float)(Math.atan2(motionX, motionZ) * 180.0 / Math.PI);
 		for (rotationPitch = (float)(Math.atan2(motionY, var16) * 180.0 / Math.PI); rotationPitch - prevRotationPitch < -180.0F; prevRotationPitch -= 360.0F) {
 			// Do nothing

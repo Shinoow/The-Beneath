@@ -433,7 +433,7 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 
 	@Override
 	@Nullable
-	public BlockPos getStrongholdGen(World worldIn, String structureName, BlockPos position)
+	public BlockPos getStrongholdGen(World worldIn, String structureName, BlockPos position, boolean bool)
 	{
 		return null;
 	}

@@ -23,7 +23,7 @@ public class EntityAIFollowPlayer extends EntityAIBase
 	@Override
 	public boolean shouldExecute()
 	{
-		List<EntityPlayer> list = theShadow.worldObj.<EntityPlayer>getEntitiesWithinAABB(EntityPlayer.class, theShadow.getEntityBoundingBox().expand(12.0D, 2.0D, 12.0D));
+		List<EntityPlayer> list = theShadow.world.<EntityPlayer>getEntitiesWithinAABB(EntityPlayer.class, theShadow.getEntityBoundingBox().expand(12.0D, 2.0D, 12.0D));
 
 		if (list.isEmpty())
 			return false;
@@ -36,7 +36,7 @@ public class EntityAIFollowPlayer extends EntityAIBase
 					break;
 				}
 
-			return thePlayer != null && theShadow.worldObj.getLight(thePlayer.getPosition()) < 6;
+			return thePlayer != null && theShadow.world.getLight(thePlayer.getPosition()) < 6;
 		}
 	}
 
@@ -46,7 +46,7 @@ public class EntityAIFollowPlayer extends EntityAIBase
 	@Override
 	public boolean continueExecuting()
 	{
-		return theShadow.worldObj.getLight(thePlayer.getPosition()) < 6;
+		return theShadow.world.getLight(thePlayer.getPosition()) < 6;
 	}
 
 	/**

@@ -24,8 +24,8 @@ public class BeneathEventHandler {
 	@SubscribeEvent
 	public void darkness(LivingUpdateEvent event){
 		if(!Beneath.mode.equalsIgnoreCase("darkness")) return;
-		if(event.getEntityLiving().worldObj.isRemote) return;
-		if(event.getEntityLiving() instanceof EntityPlayer && event.getEntityLiving().worldObj.provider.getDimension() == Beneath.dim){
+		if(event.getEntityLiving().world.isRemote) return;
+		if(event.getEntityLiving() instanceof EntityPlayer && event.getEntityLiving().world.provider.getDimension() == Beneath.dim){
 			EntityPlayer player = (EntityPlayer)event.getEntityLiving();
 			if(player.capabilities.isCreativeMode) return;
 			if(player.ticksExisted % (Beneath.darkTimer * 20) == 0)
@@ -54,8 +54,8 @@ public class BeneathEventHandler {
 	public void endTeleportation(PlayerChangedDimensionEvent event){
 		if(!Beneath.dimTeleportation) return;
 		if(event.fromDim == 1 && event.toDim == Beneath.dim)
-			if(!event.player.worldObj.isRemote){
-				World world = event.player.worldObj;
+			if(!event.player.world.isRemote){
+				World world = event.player.world;
 				BlockPos pos = event.player.getPosition().down();
 				if(world.getBlockState(pos).getBlock() != Beneath.teleporter){
 					for(int x = -2; x < 3; x++)

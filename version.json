@@ -1,8 +1,13 @@
 {
   "homepage": "https://minecraft.curseforge.com/projects/the-beneath",
   "promos": {
+    "1.11-latest": "1.1.0",
+    "1.11-recommended": "1.1.0"
     "1.10.2-latest": "1.1.0",
     "1.10.2-recommended": "1.1.0"
+  },
+  "1.11": {
+	"1.1.0": "- Ported to 1.11"
   },
   "1.10.2": {
 	"1.1.0": "- The damage and health boost of mobs inside The Beneath should no longer spiral out of control and reach 5 digit numbers\n- Added a config option that allows you to stop mob spawning inside The Beneath\n- Added a config option for the Spawn Weight of the Shadows.\n- Grue is no longer required (but the mode will switch to darkness if set to grue while Grue isn't installed)\n- Now runs on Forge 12.18.3.2185",

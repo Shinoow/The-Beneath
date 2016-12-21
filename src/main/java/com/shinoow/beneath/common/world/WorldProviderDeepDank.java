@@ -48,7 +48,7 @@ public class WorldProviderDeepDank extends WorldProvider
 	@Override
 	public IChunkGenerator createChunkGenerator()
 	{
-		return new ChunkProviderDeepDank(worldObj, worldObj.getSeed());
+		return new ChunkProviderDeepDank(world, world.getSeed());
 	}
 
 	/**
