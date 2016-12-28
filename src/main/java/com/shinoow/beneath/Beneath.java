@@ -35,10 +35,10 @@ import com.shinoow.beneath.common.network.PacketDispatcher;
 import com.shinoow.beneath.common.world.WorldProviderDeepDank;
 import com.shinoow.beneath.common.world.biome.BiomeDeepDank;
 
-@Mod(modid = Beneath.modid, name = Beneath.name, version = Beneath.version, dependencies = "required-after:forge@[forgeversion,);after:grue@[1.3.3,)", acceptedMinecraftVersions = "[1.11]", guiFactory = "com.shinoow.beneath.client.config.BeneathGuiFactory", useMetadata = false, updateJSON = "https://raw.githubusercontent.com/Shinoow/The-Beneath/master/version.json")
+@Mod(modid = Beneath.modid, name = Beneath.name, version = Beneath.version, dependencies = "required-after:forge@[forgeversion,);after:grue@[1.3.3,)", acceptedMinecraftVersions = "[1.11.2]", guiFactory = "com.shinoow.beneath.client.config.BeneathGuiFactory", useMetadata = false, updateJSON = "https://raw.githubusercontent.com/Shinoow/The-Beneath/master/version.json")
 public class Beneath {
 
-	public static final String version = "1.1.0";
+	public static final String version = "1.1.1";
 	public static final String modid = "beneath";
 	public static final String name = "The Beneath";
 

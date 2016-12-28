@@ -10,6 +10,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import com.shinoow.beneath.Beneath;
 import com.shinoow.beneath.common.network.client.SetTimerMessage;
+import com.shinoow.beneath.common.network.server.TeleportMessage;
 
 /**
  *
@@ -48,6 +49,7 @@ public class PacketDispatcher
 	public static final void registerPackets() {
 
 		registerMessage(SetTimerMessage.class);
+		registerMessage(TeleportMessage.class);
 	}
 
 	/**

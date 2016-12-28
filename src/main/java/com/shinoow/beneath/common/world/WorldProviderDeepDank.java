@@ -19,7 +19,7 @@ public class WorldProviderDeepDank extends WorldProvider
 	 * creates a new world chunk manager for WorldProvider
 	 */
 	@Override
-	public void createBiomeProvider()
+	public void init()
 	{
 		biomeProvider = new BiomeProviderSingle(Beneath.deep_dank);
 		hasNoSky = true;
