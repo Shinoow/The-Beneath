@@ -28,7 +28,7 @@ public class BeneathEventHandler {
 		if(event.getEntityLiving() instanceof EntityPlayer && event.getEntityLiving().world.provider.getDimension() == Beneath.dim){
 			EntityPlayer player = (EntityPlayer)event.getEntityLiving();
 			if(player.capabilities.isCreativeMode) return;
-			if(player.ticksExisted % (Beneath.darkTimer * 20) == 0)
+			if(player.getBrightness(1.0F) <= 0.05F && player.ticksExisted % (Beneath.darkTimer * 20) == 0)
 				player.attackEntityFrom(Beneath.darkness, Beneath.darkDamage);
 		}
 	}

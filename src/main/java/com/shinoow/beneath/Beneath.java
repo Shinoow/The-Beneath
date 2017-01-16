@@ -6,9 +6,12 @@ import java.net.URL;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.*;
@@ -21,6 +24,8 @@ import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import org.apache.logging.log4j.Level;
 
@@ -35,10 +40,10 @@ import com.shinoow.beneath.common.network.PacketDispatcher;
 import com.shinoow.beneath.common.world.WorldProviderDeepDank;
 import com.shinoow.beneath.common.world.biome.BiomeDeepDank;
 
-@Mod(modid = Beneath.modid, name = Beneath.name, version = Beneath.version, dependencies = "required-after:forge@[forgeversion,);after:grue@[1.3.3,)", acceptedMinecraftVersions = "[1.11.2]", guiFactory = "com.shinoow.beneath.client.config.BeneathGuiFactory", useMetadata = false, updateJSON = "https://raw.githubusercontent.com/Shinoow/The-Beneath/master/version.json")
+@Mod(modid = Beneath.modid, name = Beneath.name, version = Beneath.version, dependencies = "required-after:forge@[forgeversion,);after:grue@[1.3.4,)", acceptedMinecraftVersions = "[1.11.2]", guiFactory = "com.shinoow.beneath.client.config.BeneathGuiFactory", useMetadata = false, updateJSON = "https://raw.githubusercontent.com/Shinoow/The-Beneath/master/version.json")
 public class Beneath {
 
-	public static final String version = "1.1.1";
+	public static final String version = "1.2.0";
 	public static final String modid = "beneath";
 	public static final String name = "The Beneath";
 
@@ -59,6 +64,9 @@ public class Beneath {
 	public static int dim, darkTimer, darkDamage, dungeonChance, shadowSpawnWeight;
 	public static String mode;
 	public static boolean internalOreGen, keepLoaded, dimTeleportation, disableMobSpawning;
+
+	private static boolean useCraftingRecipe;
+	private static String[] craftingRecipe;
 
 	public static Biome deep_dank;
 
@@ -122,6 +130,8 @@ public class Beneath {
 			OreGenHandler.setupOregenFile();
 			OreGenHandler.saveOregenFile();
 		}
+		if(useCraftingRecipe)
+			GameRegistry.addRecipe(createCraftingRecipe(craftingRecipe));
 		proxy.init();
 	}
 
@@ -140,15 +150,20 @@ public class Beneath {
 	private static void syncConfig(){
 
 		dim = cfg.get(Configuration.CATEGORY_GENERAL, "Dimension ID", 10, "Dimension ID for The Beneath.").getInt();
-		mode = cfg.get(Configuration.CATEGORY_GENERAL, "Mode", Loader.isModLoaded("grue") ? "grue" : "darkness", "What mode The Beneath is set to. Current modes are:\ngrue: Grues spawn in the darkness\ndarkness: You take damage while in dark areas.\n§c[Minecraft Restart Required]§r").getString();
-		internalOreGen = cfg.get(Configuration.CATEGORY_GENERAL, "Internal Ore Generator", true, "Toggles whether or not to use the built-in Ore Generator. Can be disabled if you have another mod that handles Ore Generation.\n§c[Minecraft Restart Required]§r").getBoolean();
-		keepLoaded = cfg.get(Configuration.CATEGORY_GENERAL, "Keep Loaded", false, "Toggles whether or not The Beneath should be prevented from automatically unloading (might affect performance if enabled).\n§c[Minecraft Restart Required]§r").getBoolean();
+		mode = cfg.get(Configuration.CATEGORY_GENERAL, "Mode", Loader.isModLoaded("grue") ? "grue" : "darkness", "What mode The Beneath is set to. Current modes are:\ngrue: Grues spawn in the darkness\ndarkness: You take damage while in dark areas.\n"+TextFormatting.RED+"[Minecraft Restart Required]"+TextFormatting.RESET).getString();
+		internalOreGen = cfg.get(Configuration.CATEGORY_GENERAL, "Internal Ore Generator", true, "Toggles whether or not to use the built-in Ore Generator. Can be disabled if you have another mod that handles Ore Generation.\n"+TextFormatting.RED+"[Minecraft Restart Required]"+TextFormatting.RESET).getBoolean();
+		keepLoaded = cfg.get(Configuration.CATEGORY_GENERAL, "Keep Loaded", false, "Toggles whether or not The Beneath should be prevented from automatically unloading (might affect performance if enabled).\n"+TextFormatting.RED+"[Minecraft Restart Required]"+TextFormatting.RESET).getBoolean();
 		dimTeleportation = cfg.get(Configuration.CATEGORY_GENERAL, "Additional Dimension Teleportation", false, "Toggles whether or not to allow teleporting back and forth between the Beneath and dimensions that aren't the Overworld").getBoolean();
 		darkTimer = cfg.get(Configuration.CATEGORY_GENERAL, "Darkness damage timer", 5, "The amount of seconds before the darkness damages you (when the mode is set to darkness).\n[range: 1 ~ 10, default: 5]", 1, 10).getInt();
 		darkDamage = cfg.get(Configuration.CATEGORY_GENERAL, "Darkness damage", 2, "The amount of damage (half hearts) you take from the darkness (when the mode is set to darkness).\n[range: 2 ~ 20, default: 2]", 2, 20).getInt();
 		dungeonChance = cfg.get(Configuration.CATEGORY_GENERAL, "Dungeon spawn chance", 8, "The chance that a dungeon generates in The Beneath (same logic as the vanilla setting). Setting it to 0 stops dungeon generation.\n[range: 0 ~ 100, default: 8]", 0, 100).getInt();
 		shadowSpawnWeight = cfg.get(Configuration.CATEGORY_GENERAL, "Shadow Spawn Weight", 50, "Spawn Weight for the shadows, increase to increase the chance of them spawning, or decrease to decrease the chance of them spawning.\n[range: 10 ~ 100, default: 50]", 10, 100).getInt();
 		disableMobSpawning = cfg.get(Configuration.CATEGORY_GENERAL, "Disable Mob Spawning", false, "Toggles whether or not to stop mob spawning inside The Beneath.").getBoolean();
+		useCraftingRecipe = cfg.get(Configuration.CATEGORY_GENERAL, "Use Crafting Recipe", false, "Toggles whether or not to use the configurable crafting recipe.\n"+TextFormatting.RED+"[Minecraft Restart Required]"+TextFormatting.RESET).getBoolean();
+		craftingRecipe = cfg.get(Configuration.CATEGORY_GENERAL, "Beneath Teleporter Crafting Recipe", new String[]{"#&#", "&%&", "#&#", "#", "minecraft:stone:*", "&", "cobblestone", "%", "minecraft:nether_star"}, "Configurable crafting recipe for the Beneath Teleporter.\n"
+				+ "The first 3 Strings in the array are the recipe formula, where each symbol represents an Item. The Items are defined by the character being in the array before the Item in question (check the default).\n"
+				+ "Format for Items: modid:name:meta (where meta is optional, and * can be used to speficy the metadata wildcard). The OreDictionary can also be used, where you just specify the ore name (ingotIron for Iron Ingots, stone for Stone)\n"
+				+TextFormatting.RED+"[Only used if Use Crafting Recipe is enabled]"+TextFormatting.RESET).getStringList();
 
 		darkTimer = MathHelper.clamp(darkTimer, 1, 10);
 		darkDamage = MathHelper.clamp(darkDamage, 2, 20);
@@ -164,6 +179,34 @@ public class Beneath {
 	@SuppressWarnings("unchecked")
 	private static void registerEntityWithEgg(Class<? extends Entity> entity, String name, int modid, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates, int primaryColor, int secondaryColor) {
 		EntityRegistry.registerModEntity(new ResourceLocation("beneath", name), entity, "beneath."+name, modid, instance, trackingRange, updateFrequency, sendsVelocityUpdates, primaryColor, secondaryColor);
+	}
+
+	private ShapedOreRecipe createCraftingRecipe(String[] data){
+		Object[] recipe = new Object[data.length];
+
+		recipe[0] = data[0];
+		recipe[1] = data[1];
+		recipe[2] = data[2];
+
+		for(int i = 3; i < data.length; i++)
+			recipe[i] = getObject(data[i]);
+
+		return new ShapedOreRecipe(teleporter, recipe);
+	}
+
+	private Object getObject(String data){
+		if(data.length() == 1)
+			return data.charAt(0);
+		if(data.lastIndexOf(":") == -1)
+			return data;
+
+		String[] stuff = data.split(":");
+		Item item = Item.REGISTRY.getObject(new ResourceLocation(stuff[0], stuff[1]));
+
+		if(item == null) return null;
+
+		int meta = stuff.length == 3 ? stuff[2].equals("*") ? OreDictionary.WILDCARD_VALUE : Integer.valueOf(stuff[2]) : 0;
+		return new ItemStack(item, 1, meta);
 	}
 
 	private String getSupporterList(){
