@@ -1,12 +1,17 @@
 {
   "homepage": "https://minecraft.curseforge.com/projects/the-beneath",
   "promos": {
+    "1.12-latest": "1.2.0",
+    "1.12-recommended": "1.2.0",
     "1.11.2-latest": "1.2.0",
     "1.11.2-recommended": "1.2.0",
     "1.11-latest": "1.1.0",
     "1.11-recommended": "1.1.0",
     "1.10.2-latest": "1.2.0",
     "1.10.2-recommended": "1.2.0"
+  },
+  "1.12": {
+	"1.2.0": "- Ported to 1.12"
   },
   "1.11.2": {
 	"1.2.0": "- Fixed the text formatting for the config options where that was broken\n- The Darkness now actually checks if it's dark before trying to damage the player\n- Added a configurable crafting recipe for the Teleporter (can be enabled/disabled in the config, disabled by default)",

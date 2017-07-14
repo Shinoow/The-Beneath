@@ -57,14 +57,14 @@ public class TeleportMessage extends AbstractServerMessage<TeleportMessage> {
 				thePlayer.timeUntilPortal = 10;
 				if(thePlayer.dimension == 1 && Beneath.dimTeleportation)
 					thePlayer.setPositionAndUpdate(pos.getX(), pos.getY() + 1, pos.getZ());
-				thePlayer.mcServer.getPlayerList().transferPlayerToDimension(thePlayer, Beneath.dim, new TeleporterDeepDank(thePlayer.mcServer.worldServerForDimension(Beneath.dim), pos, thePlayer.world.provider));
+				thePlayer.mcServer.getPlayerList().transferPlayerToDimension(thePlayer, Beneath.dim, new TeleporterDeepDank(thePlayer.mcServer.getWorld(Beneath.dim), pos, thePlayer.world.provider));
 			}
 			else {
 				thePlayer.timeUntilPortal = 10;
 				if(Beneath.dimTeleportation){
 					TileEntityTeleporterDeepDank tile = (TileEntityTeleporterDeepDank)thePlayer.world.getTileEntity(pos);
-					thePlayer.mcServer.getPlayerList().transferPlayerToDimension(thePlayer, tile.getDimension(), new TeleporterDeepDank(thePlayer.mcServer.worldServerForDimension(tile.getDimension()), pos, thePlayer.world.provider));
-				} else thePlayer.mcServer.getPlayerList().transferPlayerToDimension(thePlayer, 0, new TeleporterDeepDank(thePlayer.mcServer.worldServerForDimension(0), pos, thePlayer.world.provider));
+					thePlayer.mcServer.getPlayerList().transferPlayerToDimension(thePlayer, tile.getDimension(), new TeleporterDeepDank(thePlayer.mcServer.getWorld(tile.getDimension()), pos, thePlayer.world.provider));
+				} else thePlayer.mcServer.getPlayerList().transferPlayerToDimension(thePlayer, 0, new TeleporterDeepDank(thePlayer.mcServer.getWorld(0), pos, thePlayer.world.provider));
 			}
 		}
 	}

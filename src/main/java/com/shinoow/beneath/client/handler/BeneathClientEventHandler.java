@@ -2,9 +2,9 @@ package com.shinoow.beneath.client.handler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -36,7 +36,7 @@ public class BeneathClientEventHandler {
 				Minecraft.getMinecraft().renderEngine.bindTexture(hand);
 				ScaledResolution scaledRes = event.getResolution();
 				Tessellator tessellator = Tessellator.getInstance();
-				VertexBuffer vertexbuffer = tessellator.getBuffer();
+				BufferBuilder vertexbuffer = tessellator.getBuffer();
 
 				vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
 				vertexbuffer.pos(0.0D, scaledRes.getScaledHeight(), -90.0D).tex(0.0D, 1.0D).endVertex();

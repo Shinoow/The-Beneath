@@ -1,12 +1,12 @@
 package com.shinoow.beneath.client.render.entity;
 
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
+
 import com.shinoow.beneath.client.model.entity.ModelHand;
 import com.shinoow.beneath.common.entity.EntityHand;
 

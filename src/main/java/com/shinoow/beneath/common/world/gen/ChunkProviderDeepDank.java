@@ -6,10 +6,6 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import com.shinoow.beneath.Beneath;
-import com.shinoow.beneath.common.handler.OreGenHandler;
-import com.shinoow.beneath.common.handler.OreEntry;
-
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -20,11 +16,15 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
-import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.MapGenBase;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.feature.WorldGenBush;
 import net.minecraft.world.gen.feature.WorldGenDungeons;
+
+import com.shinoow.beneath.Beneath;
+import com.shinoow.beneath.common.handler.OreEntry;
+import com.shinoow.beneath.common.handler.OreGenHandler;
 
 public class ChunkProviderDeepDank implements IChunkGenerator
 {
@@ -226,7 +226,7 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 	}
 
 	@Override
-	public Chunk provideChunk(int x, int z)
+	public Chunk generateChunk(int x, int z)
 	{
 		rand.setSeed(x * 341873128712L + z * 132897987541L);
 		ChunkPrimer chunkprimer = new ChunkPrimer();
@@ -433,7 +433,7 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 
 	@Override
 	@Nullable
-	public BlockPos getStrongholdGen(World worldIn, String structureName, BlockPos position, boolean bool)
+	public BlockPos getNearestStructurePos(World worldIn, String structureName, BlockPos position, boolean bool)
 	{
 		return null;
 	}
@@ -442,5 +442,11 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 	public void recreateStructures(Chunk chunkIn, int x, int z)
 	{
 
+	}
+
+	@Override
+	public boolean isInsideStructure(World worldIn, String structureName, BlockPos pos) {
+
+		return false;
 	}
 }

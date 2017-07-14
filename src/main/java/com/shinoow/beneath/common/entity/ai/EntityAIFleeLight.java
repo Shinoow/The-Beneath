@@ -4,14 +4,14 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import com.shinoow.beneath.Beneath;
-
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import com.shinoow.beneath.Beneath;
 
 public class EntityAIFleeLight extends EntityAIBase
 {
@@ -46,9 +46,9 @@ public class EntityAIFleeLight extends EntityAIBase
 				return false;
 			else
 			{
-				shelterX = vec3d.xCoord;
-				shelterY = vec3d.yCoord;
-				shelterZ = vec3d.zCoord;
+				shelterX = vec3d.x;
+				shelterY = vec3d.y;
+				shelterZ = vec3d.z;
 				return true;
 			}
 		}
@@ -58,7 +58,7 @@ public class EntityAIFleeLight extends EntityAIBase
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
 	@Override
-	public boolean continueExecuting()
+	public boolean shouldContinueExecuting()
 	{
 		return !theCreature.getNavigator().noPath();
 	}

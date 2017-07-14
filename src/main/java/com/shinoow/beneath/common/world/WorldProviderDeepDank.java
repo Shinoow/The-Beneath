@@ -6,7 +6,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.biome.BiomeProviderSingle;
-import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -22,7 +22,6 @@ public class WorldProviderDeepDank extends WorldProvider
 	public void init()
 	{
 		biomeProvider = new BiomeProviderSingle(Beneath.deep_dank);
-		hasNoSky = true;
 		setDimension(Beneath.dim);
 	}
 

@@ -12,8 +12,8 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
-		classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.5"
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+		classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.9"
     }
 }
 apply plugin: 'java'
@@ -39,10 +39,10 @@ compileJava {
 }
 
 minecraft {
-    version = "1.11.2-13.20.0.2201"
+    version = "1.12-14.21.1.2406"
     runDir = "run"
 
-    mappings = "snapshot_20161220"
+    mappings = "snapshot_20170624"
     makeObfSourceJar = false
 
 	replaceIn "Beneath.java"
@@ -85,23 +85,15 @@ processResources
     }
 }
 	
-	task srcJar(type: Jar) {
-    from sourceSets.main.allSource
+task srcJar(type: Jar) {
+    from sourceSets.main.allJava
 	
 	extension = 'jar'
-	classifier = 'src'
+	classifier = 'sources'
 }
 
-	task devJar(type: Jar, dependsOn: 'classes') {
-    from(sourceSets.main.output) {
-        include '**'
-    }
-
-    extension = 'jar'
-    classifier = 'dev'
-}
-	artifacts {
-    archives srcJar, devJar
+artifacts {
+    archives srcJar
 }
 
 curseforge {
@@ -111,7 +103,6 @@ curseforge {
 		releaseType = project.props.release_type //alpha beta release
 		changelogType = 'html'
 		changelog = new File('changelog.html') //must have at least an empty string
-		addArtifact devJar
 		addArtifact srcJar
 
 		relations {

@@ -5,11 +5,13 @@ import java.net.URL;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.DimensionType;
@@ -17,15 +19,19 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.*;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.*;
-import net.minecraftforge.fml.common.Mod.*;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.Mod.Metadata;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import org.apache.logging.log4j.Level;
 
@@ -40,7 +46,7 @@ import com.shinoow.beneath.common.network.PacketDispatcher;
 import com.shinoow.beneath.common.world.WorldProviderDeepDank;
 import com.shinoow.beneath.common.world.biome.BiomeDeepDank;
 
-@Mod(modid = Beneath.modid, name = Beneath.name, version = Beneath.version, dependencies = "required-after:forge@[forgeversion,);after:grue@[1.3.4,)", acceptedMinecraftVersions = "[1.11.2]", guiFactory = "com.shinoow.beneath.client.config.BeneathGuiFactory", useMetadata = false, updateJSON = "https://raw.githubusercontent.com/Shinoow/The-Beneath/master/version.json")
+@Mod(modid = Beneath.modid, name = Beneath.name, version = Beneath.version, dependencies = "required-after:forge@[forgeversion,);after:grue@[1.3.4,)", acceptedMinecraftVersions = "[1.12]", guiFactory = "com.shinoow.beneath.client.config.BeneathGuiFactory", useMetadata = false, updateJSON = "https://raw.githubusercontent.com/Shinoow/The-Beneath/master/version.json")
 public class Beneath {
 
 	public static final String version = "1.2.0";
@@ -93,28 +99,21 @@ public class Beneath {
 
 		deep_dank = new BiomeDeepDank();
 
-		GameRegistry.register(deep_dank.setRegistryName(new ResourceLocation(modid, "the_beneath")));
-
-		BiomeDictionary.addTypes(deep_dank, Type.DEAD);
-
 		deep_dank_dim = DimensionType.register("The Beneath", "_tb", dim, WorldProviderDeepDank.class, keepLoaded);
 
 		DimensionManager.registerDimension(dim, deep_dank_dim);
 
 		teleporter = new BlockTeleporterDeepDank();
 
-		GameRegistry.register(teleporter.setRegistryName(new ResourceLocation(modid, "teleporterbeneath")));
-		GameRegistry.register(new ItemBlock(teleporter).setRegistryName(new ResourceLocation(modid, "teleporterbeneath")));
-
 		GameRegistry.registerTileEntity(TileEntityTeleporterDeepDank.class, "tileEntityTeleporterBeneath");
 
-		beneath_normal = GameRegistry.register(new SoundEvent(new ResourceLocation(modid, "beneath.normal")).setRegistryName(new ResourceLocation(modid, "beneath.normal")));
-		beneath_muffled = GameRegistry.register(new SoundEvent(new ResourceLocation(modid, "beneath.muffled")).setRegistryName(new ResourceLocation(modid, "beneath.muffled")));
-		beneath_drawnout = GameRegistry.register(new SoundEvent(new ResourceLocation(modid, "beneath.drawnout")).setRegistryName(new ResourceLocation(modid, "beneath.drawnout")));
-		deepdank = GameRegistry.register(new SoundEvent(new ResourceLocation(modid, "deepdank")).setRegistryName(new ResourceLocation(modid, "deepdank")));
-		dark1 = GameRegistry.register(new SoundEvent(new ResourceLocation(modid, "dark1")).setRegistryName(new ResourceLocation(modid, "dark1")));
-		dark2 = GameRegistry.register(new SoundEvent(new ResourceLocation(modid, "dark2")).setRegistryName(new ResourceLocation(modid, "dark2")));
-		scream = GameRegistry.register(new SoundEvent(new ResourceLocation(modid, "scream")).setRegistryName(new ResourceLocation(modid, "scream")));
+		beneath_normal = new SoundEvent(new ResourceLocation(modid, "beneath.normal")).setRegistryName(new ResourceLocation(modid, "beneath.normal"));
+		beneath_muffled = new SoundEvent(new ResourceLocation(modid, "beneath.muffled")).setRegistryName(new ResourceLocation(modid, "beneath.muffled"));
+		beneath_drawnout = new SoundEvent(new ResourceLocation(modid, "beneath.drawnout")).setRegistryName(new ResourceLocation(modid, "beneath.drawnout"));
+		deepdank = new SoundEvent(new ResourceLocation(modid, "deepdank")).setRegistryName(new ResourceLocation(modid, "deepdank"));
+		dark1 = new SoundEvent(new ResourceLocation(modid, "dark1")).setRegistryName(new ResourceLocation(modid, "dark1"));
+		dark2 = new SoundEvent(new ResourceLocation(modid, "dark2")).setRegistryName(new ResourceLocation(modid, "dark2"));
+		scream = new SoundEvent(new ResourceLocation(modid, "scream")).setRegistryName(new ResourceLocation(modid, "scream"));
 
 		registerEntityWithEgg(EntityShadow.class, "shadow", 1, 80, 3, true, 0, 0);
 		EntityRegistry.registerModEntity(new ResourceLocation(modid, "hand"), EntityHand.class, "hand", 2, instance, 80, 3, true);
@@ -130,8 +129,7 @@ public class Beneath {
 			OreGenHandler.setupOregenFile();
 			OreGenHandler.saveOregenFile();
 		}
-		if(useCraftingRecipe)
-			GameRegistry.addRecipe(createCraftingRecipe(craftingRecipe));
+
 		proxy.init();
 	}
 
@@ -145,6 +143,41 @@ public class Beneath {
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
 		if(eventArgs.getModID().equals("beneath"))
 			syncConfig();
+	}
+
+	@SubscribeEvent
+	public void registerBlocks(RegistryEvent.Register<Block> event){
+		event.getRegistry().register(teleporter.setRegistryName(new ResourceLocation(modid, "teleporterbeneath")));
+	}
+
+	@SubscribeEvent
+	public void registerItems(RegistryEvent.Register<Item> event){
+		event.getRegistry().register(new ItemBlock(teleporter).setRegistryName(new ResourceLocation(modid, "teleporterbeneath")));
+	}
+
+	@SubscribeEvent
+	public void registerBiomes(RegistryEvent.Register<Biome> event){
+		event.getRegistry().register(deep_dank.setRegistryName(new ResourceLocation(modid, "the_beneath")));
+		BiomeDictionary.addTypes(deep_dank, Type.DEAD);
+	}
+
+	@SubscribeEvent
+	public void registerSounds(RegistryEvent.Register<SoundEvent> event){
+		IForgeRegistry<SoundEvent> reg = event.getRegistry();
+
+		reg.register(beneath_normal);
+		reg.register(beneath_muffled);
+		reg.register(beneath_drawnout);
+		reg.register(deepdank);
+		reg.register(dark1);
+		reg.register(dark2);
+		reg.register(scream);
+	}
+
+	@SubscribeEvent
+	public void registerRecipes(RegistryEvent.Register<IRecipe> event){
+		if(useCraftingRecipe)
+			event.getRegistry().register(createCraftingRecipe(craftingRecipe));
 	}
 
 	private static void syncConfig(){
@@ -181,7 +214,7 @@ public class Beneath {
 		EntityRegistry.registerModEntity(new ResourceLocation("beneath", name), entity, "beneath."+name, modid, instance, trackingRange, updateFrequency, sendsVelocityUpdates, primaryColor, secondaryColor);
 	}
 
-	private ShapedOreRecipe createCraftingRecipe(String[] data){
+	private IRecipe createCraftingRecipe(String[] data){
 		Object[] recipe = new Object[data.length];
 
 		recipe[0] = data[0];
@@ -191,7 +224,7 @@ public class Beneath {
 		for(int i = 3; i < data.length; i++)
 			recipe[i] = getObject(data[i]);
 
-		return new ShapedOreRecipe(teleporter, recipe);
+		return new ShapedOreRecipe(null, teleporter, recipe).setRegistryName(new ResourceLocation(modid, "beneath_teleporter"));
 	}
 
 	private Object getObject(String data){
@@ -220,7 +253,7 @@ public class Beneath {
 
 		} catch (IOException e) {
 			FMLLog.log("The Beneath", Level.ERROR, "Failed to fetch supporter list, using local version!");
-			names = "Enfalas, Saice Shoop, Minecreatr";
+			names = "Tedyhere";
 		}
 
 		return names;
