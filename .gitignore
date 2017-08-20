@@ -7,3 +7,7 @@ bin
 
 # Windows image file caches
 Thumbs.db
+
+.gradle/
+build/
+*.launch

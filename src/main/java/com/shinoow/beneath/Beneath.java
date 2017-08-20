@@ -61,10 +61,10 @@ public class Beneath {
 
 	static int startEntityId = 200;
 
-	public static int dim, darkTimer, darkDamage, dungeonChance, shadowSpawnWeight;
+	public static int dim, darkTimer, darkDamage, dungeonChance, shadowSpawnWeight, teleporterLinkRange;
 	public static String mode;
-	public static boolean internalOreGen, keepLoaded, dimTeleportation, disableMobSpawning;
-
+	public static boolean internalOreGen, keepLoaded, dimTeleportation, disableMobSpawning, strictLinkRangeCheck;
+	
 	private static boolean useCraftingRecipe;
 	private static String[] craftingRecipe;
 
@@ -168,6 +168,9 @@ public class Beneath {
 		darkTimer = MathHelper.clamp(darkTimer, 1, 10);
 		darkDamage = MathHelper.clamp(darkDamage, 2, 20);
 		shadowSpawnWeight = MathHelper.clamp(shadowSpawnWeight, 10, 100);
+		
+		teleporterLinkRange = cfg.get(Configuration.CATEGORY_GENERAL, "Teleporter Link Range", 32, "The maximum distance between the co-ords of two teleporters for them to become paired.").getInt();
+		strictLinkRangeCheck = cfg.get(Configuration.CATEGORY_GENERAL, "Strict Link Range", false, "When true the co-ords of two teleporters must always be within Teleporter Link Range.  When false the Y co-ordinate is not considered.").getBoolean();
 
 		if(mode.equalsIgnoreCase("grue") && !Loader.isModLoaded("grue"))
 			mode = "darkness";

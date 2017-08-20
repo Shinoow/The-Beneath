@@ -59,6 +59,13 @@ public class WorldProviderDeepDank extends WorldProvider
 	{
 		return false;
 	}
+	
+    @Override
+    public int getActualHeight()
+    {
+        //Vanilla reports worlds with no sky to only be 128 blocks tall
+        return 256;
+    }
 
 	/**
 	 * Will check if the x, z position specified is alright to be set as the map spawn point

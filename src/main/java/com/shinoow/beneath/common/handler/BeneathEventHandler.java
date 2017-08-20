@@ -57,16 +57,6 @@ public class BeneathEventHandler {
 			if(!event.player.world.isRemote){
 				World world = event.player.world;
 				BlockPos pos = event.player.getPosition().down();
-				if(world.getBlockState(pos).getBlock() != Beneath.teleporter){
-					for(int x = -2; x < 3; x++)
-						for(int y = -1; y < 3; y++)
-							for(int z = -2; z < 3; z++)
-								if(y > -1)
-									world.setBlockToAir(pos.add(x, y, z));
-								else if(world.isAirBlock(pos.add(x, y, z)))
-									world.setBlockState(pos.add(x, y, z), Blocks.STONE.getDefaultState());
-					world.setBlockState(pos, Beneath.teleporter.getDefaultState());
-				}
 				TileEntity te = world.getTileEntity(pos);
 				if(te != null && te instanceof TileEntityTeleporterDeepDank)
 					((TileEntityTeleporterDeepDank)te).setDimension(1);
