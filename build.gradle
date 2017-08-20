@@ -39,7 +39,7 @@ compileJava {
 }
 
 minecraft {
-    version = "1.11.2-13.20.0.2201"
+    version = "${props.mc_version}-${props.forge_version}"
     runDir = "run"
 
     mappings = "snapshot_20161220"
@@ -71,10 +71,10 @@ processResources
 
         // replace version and mcversion
         expand ([
-			'version':project.version,
-			'beneathversion':project.props.beneath_version,
-			'mcversion':project.props.mc_version,
-			'forgeversion':project.props.forge_version
+	        'version': project.version, 
+	        'beneathversion': project.props.beneath_version, 
+	        'mcversion': project.props.mc_version, 
+	        'forgeversion': project.props.forge_version
 		])
     }
         

@@ -26,4 +26,16 @@ public class BeneathGuiFactory implements IModGuiFactory {
 	public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element) {
 		return null;
 	}
+
+    @Override
+    public boolean hasConfigGui() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public GuiScreen createConfigGui(GuiScreen parentScreen) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
