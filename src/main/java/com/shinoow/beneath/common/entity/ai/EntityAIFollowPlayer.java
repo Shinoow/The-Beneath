@@ -44,7 +44,7 @@ public class EntityAIFollowPlayer extends EntityAIBase
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
 	@Override
-	public boolean continueExecuting()
+	public boolean shouldContinueExecuting()
 	{
 		return theShadow.world.getLight(thePlayer.getPosition()) < 6;
 	}

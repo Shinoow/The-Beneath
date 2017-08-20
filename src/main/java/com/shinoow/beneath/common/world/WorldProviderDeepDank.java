@@ -22,7 +22,8 @@ public class WorldProviderDeepDank extends WorldProvider
 	public void init()
 	{
 		biomeProvider = new BiomeProviderSingle(Beneath.deep_dank);
-		hasNoSky = true;
+		this.hasSkyLight = false;
+		this.nether = false;
 		setDimension(Beneath.dim);
 	}
 
@@ -63,7 +64,6 @@ public class WorldProviderDeepDank extends WorldProvider
     @Override
     public int getActualHeight()
     {
-        //Vanilla reports worlds with no sky to only be 128 blocks tall
         return 256;
     }
 

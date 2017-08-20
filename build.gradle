@@ -42,11 +42,13 @@ minecraft {
     version = "${props.mc_version}-${props.forge_version}"
     runDir = "run"
 
-    mappings = "snapshot_20161220"
+    mappings = "stable_32"
     makeObfSourceJar = false
 
 	replaceIn "Beneath.java"
-            replace "forgeversion", props.forge_version
+            replace 'forgeversion', props.forge_version
+            replace 'beneath_version', props.beneath_version
+
 }
 
 dependencies {

@@ -5,7 +5,6 @@ import java.net.URL;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -43,7 +42,7 @@ import com.shinoow.beneath.common.world.biome.BiomeDeepDank;
 @Mod(modid = Beneath.modid, name = Beneath.name, version = Beneath.version, dependencies = "required-after:forge@[forgeversion,);after:grue@[1.3.4,)", acceptedMinecraftVersions = "[1.11.2]", guiFactory = "com.shinoow.beneath.client.config.BeneathGuiFactory", useMetadata = false, updateJSON = "https://raw.githubusercontent.com/Shinoow/The-Beneath/master/version.json")
 public class Beneath {
 
-	public static final String version = "1.2.0";
+	public static final String version = "beneath_version";  //beneath_version will be replaced on gradle builds
 	public static final String modid = "beneath";
 	public static final String name = "The Beneath";
 

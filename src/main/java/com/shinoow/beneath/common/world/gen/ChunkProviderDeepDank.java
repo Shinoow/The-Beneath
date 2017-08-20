@@ -226,7 +226,7 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 	}
 
 	@Override
-	public Chunk provideChunk(int x, int z)
+	public Chunk generateChunk(int x, int z)
 	{
 		rand.setSeed(x * 341873128712L + z * 132897987541L);
 		ChunkPrimer chunkprimer = new ChunkPrimer();
@@ -426,14 +426,14 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 	@Override
 	public List<Biome.SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos)
 	{
-		if(Beneath.disableMobSpawning) return Collections.EMPTY_LIST;
+		if(Beneath.disableMobSpawning) return Collections.emptyList();
 		Biome biome = world.getBiome(pos);
 		return biome.getSpawnableList(creatureType);
 	}
 
 	@Override
 	@Nullable
-	public BlockPos getStrongholdGen(World worldIn, String structureName, BlockPos position, boolean bool)
+	public BlockPos getNearestStructurePos(World worldIn, String structureName, BlockPos position, boolean findUnexplored)
 	{
 		return null;
 	}
@@ -443,4 +443,5 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 	{
 
 	}
+
 }
