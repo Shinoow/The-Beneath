@@ -4,16 +4,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 
-import net.minecraftforge.fml.common.FMLLog;
-
-import org.apache.logging.log4j.Level;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import com.shinoow.beneath.Beneath;
 
 /**
  * Used to read JSON data with pre-made checks for null entries and casting.</br>
@@ -117,7 +114,7 @@ public class JsonHelper
 			return json;
 		} catch(Exception e)
 		{
-			FMLLog.log("The Beneath", Level.ERROR, "An error occured while loading JSON from file:", e);
+			Beneath.log.error("An error occured while loading JSON Object from file.", e);
 			return new JsonObject(); // Just a safety measure against NPEs
 		}
 	}
@@ -135,7 +132,7 @@ public class JsonHelper
 			return json;
 		} catch(Exception e)
 		{
-			FMLLog.log("The Beneath", Level.ERROR, "An error occured while loading JSON from file:", e);
+			Beneath.log.error("An error occured while loading JSON Array from file.", e);
 			return new JsonArray(); // Just a safety measure against NPEs
 		}
 	}
@@ -152,7 +149,7 @@ public class JsonHelper
 			fw.close();
 		} catch(Exception e)
 		{
-			FMLLog.log("The Beneath", Level.ERROR, "An error occured while saving JSON to file:", e);
+			Beneath.log.error("An error occured while saving JSON to file.", e);
 			return;
 		}
 	}

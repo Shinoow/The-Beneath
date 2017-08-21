@@ -5,7 +5,6 @@ import java.net.URL;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -27,7 +26,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Logger;
 
 import com.shinoow.beneath.common.CommonProxy;
 import com.shinoow.beneath.common.block.BlockTeleporterDeepDank;
@@ -43,7 +42,7 @@ import com.shinoow.beneath.common.world.biome.BiomeDeepDank;
 @Mod(modid = Beneath.modid, name = Beneath.name, version = Beneath.version, dependencies = "required-after:forge@[forgeversion,);after:grue@[1.3.4,)", acceptedMinecraftVersions = "[1.11.2]", guiFactory = "com.shinoow.beneath.client.config.BeneathGuiFactory", useMetadata = false, updateJSON = "https://raw.githubusercontent.com/Shinoow/The-Beneath/master/version.json")
 public class Beneath {
 
-	public static final String version = "1.2.0";
+	public static final String version = "beneath_version";  //beneath_version will be replaced on gradle builds
 	public static final String modid = "beneath";
 	public static final String name = "The Beneath";
 
@@ -61,10 +60,10 @@ public class Beneath {
 
 	static int startEntityId = 200;
 
-	public static int dim, darkTimer, darkDamage, dungeonChance, shadowSpawnWeight;
+	public static int dim, darkTimer, darkDamage, dungeonChance, shadowSpawnWeight, teleporterLinkRange;
 	public static String mode;
-	public static boolean internalOreGen, keepLoaded, dimTeleportation, disableMobSpawning;
-
+	public static boolean internalOreGen, keepLoaded, dimTeleportation, disableMobSpawning, strictLinkRangeCheck;
+	
 	private static boolean useCraftingRecipe;
 	private static String[] craftingRecipe;
 
@@ -77,8 +76,12 @@ public class Beneath {
 
 	public static SoundEvent beneath_normal, beneath_muffled, beneath_drawnout, deepdank, dark1, dark2, scream;
 
+	public static Logger log;
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event){
+		
+		log = event.getModLog();
 
 		metadata = event.getModMetadata();
 		metadata.description = metadata.description +"\n\n\u00a76Supporters: "+getSupporterList()+"\u00a7r";
@@ -168,6 +171,9 @@ public class Beneath {
 		darkTimer = MathHelper.clamp(darkTimer, 1, 10);
 		darkDamage = MathHelper.clamp(darkDamage, 2, 20);
 		shadowSpawnWeight = MathHelper.clamp(shadowSpawnWeight, 10, 100);
+		
+		teleporterLinkRange = cfg.get(Configuration.CATEGORY_GENERAL, "Teleporter Link Range", 32, "The maximum distance between the co-ords of two teleporters for them to become paired.").getInt();
+		strictLinkRangeCheck = cfg.get(Configuration.CATEGORY_GENERAL, "Strict Link Range", false, "When true the co-ords of two teleporters must always be within Teleporter Link Range.  When false the Y co-ordinate is not considered.").getBoolean();
 
 		if(mode.equalsIgnoreCase("grue") && !Loader.isModLoaded("grue"))
 			mode = "darkness";
@@ -176,7 +182,6 @@ public class Beneath {
 			cfg.save();
 	}
 
-	@SuppressWarnings("unchecked")
 	private static void registerEntityWithEgg(Class<? extends Entity> entity, String name, int modid, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates, int primaryColor, int secondaryColor) {
 		EntityRegistry.registerModEntity(new ResourceLocation("beneath", name), entity, "beneath."+name, modid, instance, trackingRange, updateFrequency, sendsVelocityUpdates, primaryColor, secondaryColor);
 	}
@@ -219,7 +224,7 @@ public class Beneath {
 			nameFile.close();
 
 		} catch (IOException e) {
-			FMLLog.log("The Beneath", Level.ERROR, "Failed to fetch supporter list, using local version!");
+			Beneath.log.error("Failed to fetch supporter list, using local version!");
 			names = "Enfalas, Saice Shoop, Minecreatr";
 		}
 

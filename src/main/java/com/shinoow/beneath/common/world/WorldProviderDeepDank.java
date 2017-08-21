@@ -22,7 +22,8 @@ public class WorldProviderDeepDank extends WorldProvider
 	public void init()
 	{
 		biomeProvider = new BiomeProviderSingle(Beneath.deep_dank);
-		hasNoSky = true;
+		this.hasSkyLight = false;
+		this.nether = false;
 		setDimension(Beneath.dim);
 	}
 
@@ -59,6 +60,12 @@ public class WorldProviderDeepDank extends WorldProvider
 	{
 		return false;
 	}
+	
+    @Override
+    public int getActualHeight()
+    {
+        return 256;
+    }
 
 	/**
 	 * Will check if the x, z position specified is alright to be set as the map spawn point

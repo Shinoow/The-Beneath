@@ -30,20 +30,24 @@ public class OreEntry {
 		this.maxY = maxY;
 	}
 
+	@SuppressWarnings("deprecation")
 	public IBlockState getOre(){
 		IBlockState state = null;
 		Block b = Block.REGISTRY.getObject(new ResourceLocation(ore));
 		if(b != null)
-			state = oreMeta < 0 ? b.getDefaultState() : b.getStateFromMeta(oreMeta);
-			return state != null ? state : Blocks.STONE.getDefaultState();
+			//would like to remove this call to getStateFromMeta() but unable to find an alternative
+			state = oreMeta < 0 ? b.getDefaultState() : b.getStateFromMeta(oreMeta);  
+		return state != null ? state : Blocks.STONE.getDefaultState();
 	}
 
+	@SuppressWarnings("deprecation")
 	public IBlockState getSource(){
 		IBlockState state = null;
 		Block b = Block.REGISTRY.getObject(new ResourceLocation(source));
 		if(b != null)
+			//would like to remove this call to getStateFromMeta() but unable to find an alternative
 			state = srcMeta < 0 ? b.getDefaultState() : b.getStateFromMeta(srcMeta);
-			return state != null ? state : Blocks.STONE.getDefaultState();
+		return state != null ? state : Blocks.STONE.getDefaultState();
 	}
 
 	public OreEntry(JsonObject json){
