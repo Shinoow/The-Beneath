@@ -1,7 +1,7 @@
 {
   "homepage": "https://minecraft.curseforge.com/projects/the-beneath",
   "promos": {
-    "1.11.2-latest": "1.2.0",
+    "1.11.2-latest": "1.2.1",
     "1.11.2-recommended": "1.2.0",
     "1.11-latest": "1.1.0",
     "1.11-recommended": "1.1.0",
@@ -9,6 +9,7 @@
     "1.10.2-recommended": "1.2.0"
   },
   "1.11.2": {
+  "1.2.1": "- Improved locating a safe arrival point and placed teleporters attempt to link to pre-existing teleporters before creating a new one.", 
 	"1.2.0": "- Fixed the text formatting for the config options where that was broken\n- The Darkness now actually checks if it's dark before trying to damage the player\n- Added a configurable crafting recipe for the Teleporter (can be enabled/disabled in the config, disabled by default)",
 	"1.1.1": "- Ghost Teleporter block no longer appear if teleporting out from The Beneath with a Teleporter placed inside it\n- Ported to 1.11.2"
   },
