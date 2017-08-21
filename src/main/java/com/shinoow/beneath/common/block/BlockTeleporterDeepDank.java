@@ -28,9 +28,11 @@ public class BlockTeleporterDeepDank extends Block implements ITileEntityProvide
 	}
 
 	@Override
-	public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos)
+	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
 	{
-		return worldIn.provider.getDimension() == Beneath.dim ? -1.0F : super.getBlockHardness(blockState, worldIn, pos);
+		if (worldIn.provider.getDimension() == Beneath.dim) {
+			setBlockUnbreakable();
+		}
 	}
 
 	@Override
@@ -44,7 +46,6 @@ public class BlockTeleporterDeepDank extends Block implements ITileEntityProvide
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-
 		return new TileEntityTeleporterDeepDank();
 	}
 }

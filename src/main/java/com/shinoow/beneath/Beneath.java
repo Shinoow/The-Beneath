@@ -26,7 +26,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Logger;
 
 import com.shinoow.beneath.common.CommonProxy;
 import com.shinoow.beneath.common.block.BlockTeleporterDeepDank;
@@ -76,8 +76,12 @@ public class Beneath {
 
 	public static SoundEvent beneath_normal, beneath_muffled, beneath_drawnout, deepdank, dark1, dark2, scream;
 
+	public static Logger log;
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event){
+		
+		log = event.getModLog();
 
 		metadata = event.getModMetadata();
 		metadata.description = metadata.description +"\n\n\u00a76Supporters: "+getSupporterList()+"\u00a7r";
@@ -178,7 +182,6 @@ public class Beneath {
 			cfg.save();
 	}
 
-	@SuppressWarnings("unchecked")
 	private static void registerEntityWithEgg(Class<? extends Entity> entity, String name, int modid, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates, int primaryColor, int secondaryColor) {
 		EntityRegistry.registerModEntity(new ResourceLocation("beneath", name), entity, "beneath."+name, modid, instance, trackingRange, updateFrequency, sendsVelocityUpdates, primaryColor, secondaryColor);
 	}
@@ -221,7 +224,7 @@ public class Beneath {
 			nameFile.close();
 
 		} catch (IOException e) {
-			FMLLog.log("The Beneath", Level.ERROR, "Failed to fetch supporter list, using local version!");
+			Beneath.log.error("Failed to fetch supporter list, using local version!");
 			names = "Enfalas, Saice Shoop, Minecreatr";
 		}
 

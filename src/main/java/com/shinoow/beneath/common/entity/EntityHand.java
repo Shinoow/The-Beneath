@@ -125,7 +125,7 @@ public class EntityHand extends Entity {
 			if (object != null)
 				motionVec = new Vec3d(object.hitVec.x, object.hitVec.y, object.hitVec.z);
 			Entity entityHit = null;
-			List entitiesInPath = world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().offset(motionX, motionY, motionZ).expand(1.0, 1.0, 1.0));
+			List<Entity> entitiesInPath = world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().offset(motionX, motionY, motionZ).expand(1.0, 1.0, 1.0));
 			double d = Double.POSITIVE_INFINITY;
 			for (int i = 0; i < entitiesInPath.size(); i++) {
 				Entity entityInPath = (Entity) entitiesInPath.get(i);
