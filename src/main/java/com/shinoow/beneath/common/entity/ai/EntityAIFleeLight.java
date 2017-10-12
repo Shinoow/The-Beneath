@@ -4,14 +4,14 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import com.shinoow.beneath.Beneath;
-
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import com.shinoow.beneath.Beneath;
 
 public class EntityAIFleeLight extends EntityAIBase
 {
