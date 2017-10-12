@@ -1,19 +1,25 @@
 {
   "homepage": "https://minecraft.curseforge.com/projects/the-beneath",
   "promos": {
+    "1.12.2-latest": "1.3.0",
+    "1.12.2-recommended": "1.3.0",
     "1.12-latest": "1.2.0",
     "1.12-recommended": "1.2.0",
-    "1.11.2-latest": "1.2.0",
-    "1.11.2-recommended": "1.2.0",
+    "1.11.2-latest": "1.3.0",
+    "1.11.2-recommended": "1.3.0",
     "1.11-latest": "1.1.0",
     "1.11-recommended": "1.1.0",
-    "1.10.2-latest": "1.2.0",
-    "1.10.2-recommended": "1.2.0"
+    "1.10.2-latest": "1.3.0",
+    "1.10.2-recommended": "1.3.0"
+  },
+  "1.12.2": {
+	"1.3.0": "- Recompiled against 1.12.2\n- Now runs on Forge 14.23.0.2491\n- The sky colors when the Night Vision potion effect is enabled can be changed in the config file\n- When initially teleporting into The Beneath, torches will spawn on the edges of the platform (can be toggled in the config file)\n- You can't use the teleporter unless you're within 2 blocks of it (so you don't accidentally fall 50 blocks to your imminent death when entering, instead of dying later)\n- The health and damage boost of mobs inside The Beneath can now be configured\n- Added a configurable list of fluid blocks to generate lakes with inside The Beneath\n- Added a config option to set the rarity of the aforementioned lakes\n- Things like Dirt, Gravel, and the various stone types now generate inside The Beneath (run before the ore generator, using a separate json file, named blockdeco.json)\n- Added a config option to disable the aforementioned decorator"
   },
   "1.12": {
 	"1.2.0": "- Ported to 1.12"
   },
   "1.11.2": {
+	"1.3.0": "- The sky colors when the Night Vision potion effect is enabled can be changed in the config file\n- When initially teleporting into The Beneath, torches will spawn on the edges of the platform (can be toggled in the config file)\n- You can't use the teleporter unless you're within 2 blocks of it (so you don't accidentally fall 50 blocks to your imminent death when entering, instead of dying later)\n- The health and damage boost of mobs inside The Beneath can now be configured\n- Added a configurable list of fluid blocks to generate lakes with inside The Beneath\n- Added a config option to set the rarity of the aforementioned lakes\n- Things like Dirt, Gravel, and the various stone types now generate inside The Beneath (run before the ore generator, using a separate json file, named blockdeco.json)\n- Added a config option to disable the aforementioned decorator",
 	"1.2.0": "- Fixed the text formatting for the config options where that was broken\n- The Darkness now actually checks if it's dark before trying to damage the player\n- Added a configurable crafting recipe for the Teleporter (can be enabled/disabled in the config, disabled by default)",
 	"1.1.1": "- Ghost Teleporter block no longer appear if teleporting out from The Beneath with a Teleporter placed inside it\n- Ported to 1.11.2"
   },
@@ -21,6 +27,7 @@
 	"1.1.0": "- Ported to 1.11"
   },
   "1.10.2": {
+	"1.3.0": "- The sky colors when the Night Vision potion effect is enabled can be changed in the config file\n- When initially teleporting into The Beneath, torches will spawn on the edges of the platform (can be toggled in the config file)\n- You can't use the teleporter unless you're within 2 blocks of it (so you don't accidentally fall 50 blocks to your imminent death when entering, instead of dying later)\n- The health and damage boost of mobs inside The Beneath can now be configured\n- Added a configurable list of fluid blocks to generate lakes with inside The Beneath\n- Added a config option to set the rarity of the aforementioned lakes\n- Things like Dirt, Gravel, and the various stone types now generate inside The Beneath (run before the ore generator, using a separate json file, named blockdeco.json)\n- Added a config option to disable the aforementioned decorator",
 	"1.2.0": "- Fixed the text formatting for the config options where that was broken\n- The Darkness now actually checks if it's dark before trying to damage the player\n- Added a configurable crafting recipe for the Teleporter (can be enabled/disabled in the config, disabled by default)",
 	"1.1.1": "- Ghost Teleporter block no longer appear if teleporting out from The Beneath with a Teleporter placed inside it",
 	"1.1.0": "- The damage and health boost of mobs inside The Beneath should no longer spiral out of control and reach 5 digit numbers\n- Added a config option that allows you to stop mob spawning inside The Beneath\n- Added a config option for the Spawn Weight of the Shadows.\n- Grue is no longer required (but the mode will switch to darkness if set to grue while Grue isn't installed)\n- Now runs on Forge 12.18.3.2185",

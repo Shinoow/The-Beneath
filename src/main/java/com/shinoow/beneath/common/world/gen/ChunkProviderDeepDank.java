@@ -6,6 +6,7 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -21,8 +22,10 @@ import net.minecraft.world.gen.MapGenBase;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.feature.WorldGenBush;
 import net.minecraft.world.gen.feature.WorldGenDungeons;
+import net.minecraft.world.gen.feature.WorldGenLakes;
 
 import com.shinoow.beneath.Beneath;
+import com.shinoow.beneath.common.handler.BlockDecorationHandler;
 import com.shinoow.beneath.common.handler.OreEntry;
 import com.shinoow.beneath.common.handler.OreGenHandler;
 
@@ -388,6 +391,15 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 				redMushroomFeature.generate(world, rand, blockpos.add(rand.nextInt(16) + 8, rand.nextInt(256), rand.nextInt(16) + 8));
 		}
 
+		if(Beneath.lakeChance > 0)
+			for(Block block : Beneath.fluid_blocks)
+				if(rand.nextInt(Beneath.lakeChance) == 0){
+					int i1 = rand.nextInt(16) + 8;
+					int j1 = rand.nextInt(256);
+					int k1 = rand.nextInt(16) + 8;
+					new WorldGenLakes(block).generate(world, rand, blockpos.add(i1, j1, k1));
+				}
+
 		if(Beneath.dungeonChance > 0)
 			if(net.minecraftforge.event.terraingen.TerrainGen.populate(this, world, rand, x, z, false, net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType.DUNGEON))
 				for(int j2 = 0; j2 < Beneath.dungeonChance; ++j2)
@@ -397,6 +409,19 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 					int l1 = rand.nextInt(16) + 8;
 					new WorldGenDungeons().generate(world, rand, blockpos.add(i3, l3, l1));
 				}
+
+		if(Beneath.useDecorator)
+			for(OreEntry entry : BlockDecorationHandler.getBlockDeco())
+			{
+				WorldGenMinableDank worldgenminable = new WorldGenMinableDank(entry.getOre(), entry.size, entry.getSource());
+				for(int k1 = 0; k1 < entry.veins; ++k1)
+				{
+					int l1 = rand.nextInt(16);
+					int i2 = rand.nextInt(entry.maxY - entry.minY) + entry.minY;
+					int j2 = rand.nextInt(16);
+					worldgenminable.generate(world, rand, blockpos.add(l1, i2, j2));
+				}
+			}
 
 		if(Beneath.internalOreGen)
 			for(OreEntry entry : OreGenHandler.getOregen())

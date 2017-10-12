@@ -42,6 +42,16 @@ public class TeleporterDeepDank extends Teleporter {
 							worldServer.setBlockToAir(pos.add(x, y, z));
 						else if(worldServer.isAirBlock(pos.add(x, y, z)))
 							worldServer.setBlockState(pos.add(x, y, z), Blocks.STONE.getDefaultState());
+			if(Beneath.teleportTorches){
+				worldServer.setBlockState(pos.add(-2, 0, -2), Blocks.TORCH.getDefaultState());
+				worldServer.setBlockState(pos.add(-2, 0, 2), Blocks.TORCH.getDefaultState());
+				worldServer.setBlockState(pos.add(2, 0, -2), Blocks.TORCH.getDefaultState());
+				worldServer.setBlockState(pos.add(2, 0, 2), Blocks.TORCH.getDefaultState());
+				for(int x = -2; x < 3; x++)
+					for(int y = 0; y < 3; y++)
+						for(int z = -2; z < 3; z++)
+							worldServer.checkLight(pos.add(x, y, z));
+			}
 			worldServer.setBlockState(pos, Beneath.teleporter.getDefaultState());
 		}
 		if(Beneath.dimTeleportation){
