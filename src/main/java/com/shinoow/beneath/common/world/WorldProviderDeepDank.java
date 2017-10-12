@@ -41,7 +41,7 @@ public class WorldProviderDeepDank extends WorldProvider
 	public Vec3d getSkyColor(net.minecraft.entity.Entity cameraEntity, float partialTicks)
 	{
 		if(cameraEntity instanceof EntityLivingBase && ((EntityLivingBase)cameraEntity).getActivePotionEffect(MobEffects.NIGHT_VISION) != null)
-			return new Vec3d(1,1,1);
+			return new Vec3d(Beneath.red, Beneath.green, Beneath.blue);
 		return new Vec3d(0,0,0);
 	}
 

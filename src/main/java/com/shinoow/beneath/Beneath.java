@@ -2,6 +2,7 @@ package com.shinoow.beneath;
 
 import java.io.*;
 import java.net.URL;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -9,7 +10,9 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.DimensionType;
@@ -19,31 +22,36 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.*;
-import net.minecraftforge.fml.common.Mod.*;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.Mod.Metadata;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import org.apache.logging.log4j.Level;
 
+import com.google.common.collect.Lists;
 import com.shinoow.beneath.common.CommonProxy;
 import com.shinoow.beneath.common.block.BlockTeleporterDeepDank;
 import com.shinoow.beneath.common.block.tile.TileEntityTeleporterDeepDank;
 import com.shinoow.beneath.common.entity.EntityHand;
 import com.shinoow.beneath.common.entity.EntityShadow;
 import com.shinoow.beneath.common.handler.BeneathEventHandler;
+import com.shinoow.beneath.common.handler.BlockDecorationHandler;
 import com.shinoow.beneath.common.handler.OreGenHandler;
 import com.shinoow.beneath.common.network.PacketDispatcher;
 import com.shinoow.beneath.common.world.WorldProviderDeepDank;
 import com.shinoow.beneath.common.world.biome.BiomeDeepDank;
 
-@Mod(modid = Beneath.modid, name = Beneath.name, version = Beneath.version, dependencies = "required-after:Forge@[forgeversion,);after:grue@[1.3.4,)", acceptedMinecraftVersions = "[1.10.2]", guiFactory = "com.shinoow.beneath.client.config.BeneathGuiFactory", useMetadata = false, updateJSON = "https://raw.githubusercontent.com/Shinoow/The-Beneath/master/version.json")
+@Mod(modid = Beneath.modid, name = Beneath.name, version = Beneath.version, dependencies = "required-after:Forge@[forgeversion,);after:grue@[1.3.4,)", acceptedMinecraftVersions = "[1.10.2]", guiFactory = "com.shinoow.beneath.client.config.BeneathGuiFactory", useMetadata = false, updateJSON = "https://raw.githubusercontent.com/Shinoow/The-Beneath/master/version.json", certificateFingerprint = "cert_fingerprint")
 public class Beneath {
 
-	public static final String version = "1.2.0";
+	public static final String version = "1.3.0";
 	public static final String modid = "beneath";
 	public static final String name = "The Beneath";
 
@@ -61,12 +69,13 @@ public class Beneath {
 
 	static int startEntityId = 200;
 
-	public static int dim, darkTimer, darkDamage, dungeonChance, shadowSpawnWeight;
+	public static int dim, darkTimer, darkDamage, dungeonChance, shadowSpawnWeight, lakeChance;
 	public static String mode;
-	public static boolean internalOreGen, keepLoaded, dimTeleportation, disableMobSpawning;
+	public static boolean internalOreGen, keepLoaded, dimTeleportation, disableMobSpawning, useCraftingRecipe, teleportTorches, useDecorator;
+	public static double red, green, blue, damageMultiplier, healthMultiplier;
+	private static String[] craftingRecipe, fluidBlocks;
 
-	private static boolean useCraftingRecipe;
-	private static String[] craftingRecipe;
+	public static List<Block> fluid_blocks = Lists.newArrayList();
 
 	public static Biome deep_dank;
 
@@ -130,6 +139,12 @@ public class Beneath {
 			OreGenHandler.setupOregenFile();
 			OreGenHandler.saveOregenFile();
 		}
+		if(useDecorator){
+			BlockDecorationHandler.setupBlockDecoFile();
+			BlockDecorationHandler.saveBlockDecoFile();
+		}
+		for(String str : fluidBlocks)
+			fluid_blocks.add(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(str)));
 		if(useCraftingRecipe)
 			GameRegistry.addRecipe(createCraftingRecipe(craftingRecipe));
 		proxy.init();
@@ -139,6 +154,11 @@ public class Beneath {
 	public void postInit(FMLPostInitializationEvent event){
 		((BiomeDeepDank) deep_dank).setSpawnLists();
 		proxy.postInit();
+	}
+
+	@EventHandler
+	public void onFingerprintViolation(FMLFingerprintViolationEvent event) {
+		FMLLog.log("The Beneath", Level.WARN, "Invalid fingerprint detected! The file " + event.getSource().getName() + " may have been tampered with. This version will NOT be supported by the author!");
 	}
 
 	@SubscribeEvent
@@ -164,10 +184,24 @@ public class Beneath {
 				+ "The first 3 Strings in the array are the recipe formula, where each symbol represents an Item. The Items are defined by the character being in the array before the Item in question (check the default).\n"
 				+ "Format for Items: modid:name:meta (where meta is optional, and * can be used to speficy the metadata wildcard). The OreDictionary can also be used, where you just specify the ore name (ingotIron for Iron Ingots, stone for Stone)\n"
 				+TextFormatting.RED+"[Only used if Use Crafting Recipe is enabled]"+TextFormatting.RESET).getStringList();
+		red = cfg.get(Configuration.CATEGORY_GENERAL, "Red Night Vision sky color", 1.1D, "Changes the red part of the Beneath sky color while affected by Night Vision. Client side only.\n[range: 0.0 ~ 10.0, default: 1.1]", 0.0D, 10.0D).getDouble();
+		green = cfg.get(Configuration.CATEGORY_GENERAL, "Green Night Vision sky color", 0.0D, "Changes the green part of the Beneath sky color while affected by Night Vision. Client side only.\n[range: 0.0 ~ 10.0, default: 0.0]", 0.0D, 10.0D).getDouble();
+		blue = cfg.get(Configuration.CATEGORY_GENERAL, "Blue Night Vision sky color", 1.5D, "Changes the red part of the Beneath sky color while affected by Night Vision. Client side only.\n[range: 0.0 ~ 10.0, default: 1.5]", 0.0D, 10.0D).getDouble();
+		teleportTorches = cfg.get(Configuration.CATEGORY_GENERAL, "Teleporter Torches", true, "Whether or not torches should spawn on the platform generated when entering The Beneath.").getBoolean();
+		damageMultiplier = cfg.get(Configuration.CATEGORY_GENERAL, "Damage Multiplier", 2.0D, "Sets how much mob damage is multiplied by inside The Beneath\n[range: 2.0 ~ 10.0, default: 2.0]", 2.0D, 10.0D).getDouble();
+		healthMultiplier = cfg.get(Configuration.CATEGORY_GENERAL, "Health Multiplier", 2.0D, "Sets how much mob health is multiplied by inside The Beneath\n[range: 2.0 ~ 10.0, default: 2.0]", 2.0D, 10.0D).getDouble();
+		fluidBlocks = cfg.get(Configuration.CATEGORY_GENERAL, "Lake Fluid Blocks", new String[]{"minecraft:water", "minecraft:lava"}, "Any fluid blocks added to this list will randomly generate as part of lakes inside The Beneath (format is \"modid:name\")\n"+TextFormatting.RED+"[Minecraft Restart Required]"+TextFormatting.RESET).getStringList();
+		lakeChance = cfg.get(Configuration.CATEGORY_GENERAL, "Lake spawn chance", 10, "The chance that a lake generates in The Beneath (same logic as the vanilla setting). Setting it to 0 stops lake generation\n[range: 0 ~ 100, default: 10]", 0, 100).getInt();
+		useDecorator = cfg.get(Configuration.CATEGORY_GENERAL, "Use Block Decorator", true, "Toggles whether or not to use the built-in Block Decorator (functions like the Ore Generator, except it runs before it, and is intended for things like dirt, gravel, stone types).\n"+TextFormatting.RED+"[Minecraft Restart Required]"+TextFormatting.RESET).getBoolean();
 
 		darkTimer = MathHelper.clamp_int(darkTimer, 1, 10);
 		darkDamage = MathHelper.clamp_int(darkDamage, 2, 20);
 		shadowSpawnWeight = MathHelper.clamp_int(shadowSpawnWeight, 10, 100);
+		red = MathHelper.clamp_double(red, 0, 10);
+		green = MathHelper.clamp_double(green, 0, 10);
+		blue = MathHelper.clamp_double(blue, 0, 10);
+		damageMultiplier = MathHelper.clamp_double(damageMultiplier, 2, 10);
+		healthMultiplier = MathHelper.clamp_double(healthMultiplier, 2, 10);
 
 		if(mode.equalsIgnoreCase("grue") && !Loader.isModLoaded("grue"))
 			mode = "darkness";
