@@ -2,6 +2,9 @@ package com.shinoow.beneath.common.world;
 
 import java.util.Random;
 
+import com.shinoow.beneath.Beneath;
+import com.shinoow.beneath.common.block.tile.TileEntityTeleporterDeepDank;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
@@ -12,9 +15,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
-
-import com.shinoow.beneath.Beneath;
-import com.shinoow.beneath.common.block.tile.TileEntityTeleporterDeepDank;
 
 
 public class TeleporterDeepDank extends Teleporter {
@@ -41,7 +41,7 @@ public class TeleporterDeepDank extends Teleporter {
 						if(y > -1)
 							worldServer.setBlockToAir(pos.add(x, y, z));
 						else if(worldServer.isAirBlock(pos.add(x, y, z)))
-							worldServer.setBlockState(pos.add(x, y, z), Blocks.STONE.getDefaultState());
+							worldServer.setBlockState(pos.add(x, y, z), Blocks.COBBLESTONE.getDefaultState());
 			if(Beneath.teleportTorches){
 				worldServer.setBlockState(pos.add(-2, 0, -2), Blocks.TORCH.getDefaultState());
 				worldServer.setBlockState(pos.add(-2, 0, 2), Blocks.TORCH.getDefaultState());

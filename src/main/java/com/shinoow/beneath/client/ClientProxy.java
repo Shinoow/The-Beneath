@@ -1,5 +1,13 @@
 package com.shinoow.beneath.client;
 
+import com.shinoow.beneath.Beneath;
+import com.shinoow.beneath.client.handler.BeneathClientEventHandler;
+import com.shinoow.beneath.client.render.entity.RenderHand;
+import com.shinoow.beneath.client.render.entity.RenderShadow;
+import com.shinoow.beneath.common.CommonProxy;
+import com.shinoow.beneath.common.entity.EntityHand;
+import com.shinoow.beneath.common.entity.EntityShadow;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,14 +16,6 @@ import net.minecraft.util.IThreadListener;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-
-import com.shinoow.beneath.Beneath;
-import com.shinoow.beneath.client.handler.BeneathClientEventHandler;
-import com.shinoow.beneath.client.render.entity.RenderHand;
-import com.shinoow.beneath.client.render.entity.RenderShadow;
-import com.shinoow.beneath.common.CommonProxy;
-import com.shinoow.beneath.common.entity.EntityHand;
-import com.shinoow.beneath.common.entity.EntityShadow;
 
 public class ClientProxy extends CommonProxy {
 

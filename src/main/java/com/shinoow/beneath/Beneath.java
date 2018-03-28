@@ -4,35 +4,6 @@ import java.io.*;
 import java.net.URL;
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.DimensionType;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.*;
-import net.minecraftforge.common.BiomeDictionary.Type;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.*;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.Mod.Metadata;
-import net.minecraftforge.fml.common.event.*;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-
 import org.apache.logging.log4j.Level;
 
 import com.google.common.collect.Lists;
@@ -47,6 +18,38 @@ import com.shinoow.beneath.common.handler.OreGenHandler;
 import com.shinoow.beneath.common.network.PacketDispatcher;
 import com.shinoow.beneath.common.world.WorldProviderDeepDank;
 import com.shinoow.beneath.common.world.biome.BiomeDeepDank;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.DimensionType;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
+import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.*;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.Mod.Metadata;
+import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 @Mod(modid = Beneath.modid, name = Beneath.name, version = Beneath.version, dependencies = "required-after:Forge@[forgeversion,);after:grue@[1.3.4,)", acceptedMinecraftVersions = "[1.10.2]", guiFactory = "com.shinoow.beneath.client.config.BeneathGuiFactory", useMetadata = false, updateJSON = "https://raw.githubusercontent.com/Shinoow/The-Beneath/master/version.json", certificateFingerprint = "cert_fingerprint")
 public class Beneath {
@@ -69,7 +72,7 @@ public class Beneath {
 
 	static int startEntityId = 200;
 
-	public static int dim, darkTimer, darkDamage, dungeonChance, shadowSpawnWeight, lakeChance;
+	public static int dim, darkTimer, darkDamage, dungeonChance, shadowSpawnWeight, lakeChance, stalactiteChance, stalagmiteChance;
 	public static String mode;
 	public static boolean internalOreGen, keepLoaded, dimTeleportation, disableMobSpawning, useCraftingRecipe, teleportTorches, useDecorator;
 	public static double red, green, blue, damageMultiplier, healthMultiplier;
@@ -85,6 +88,8 @@ public class Beneath {
 	public static DamageSource darkness = new DamageSource("darkness").setDamageBypassesArmor();
 
 	public static SoundEvent beneath_normal, beneath_muffled, beneath_drawnout, deepdank, dark1, dark2, scream;
+
+	public static final ResourceLocation shadow_loot_table = LootTableList.register(new ResourceLocation(modid, "entities/shadow"));
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event){
@@ -193,6 +198,8 @@ public class Beneath {
 		fluidBlocks = cfg.get(Configuration.CATEGORY_GENERAL, "Lake Fluid Blocks", new String[]{"minecraft:water", "minecraft:lava"}, "Any fluid blocks added to this list will randomly generate as part of lakes inside The Beneath (format is \"modid:name\")\n"+TextFormatting.RED+"[Minecraft Restart Required]"+TextFormatting.RESET).getStringList();
 		lakeChance = cfg.get(Configuration.CATEGORY_GENERAL, "Lake spawn chance", 10, "The chance that a lake generates in The Beneath (same logic as the vanilla setting). Setting it to 0 stops lake generation\n[range: 0 ~ 100, default: 10]", 0, 100).getInt();
 		useDecorator = cfg.get(Configuration.CATEGORY_GENERAL, "Use Block Decorator", true, "Toggles whether or not to use the built-in Block Decorator (functions like the Ore Generator, except it runs before it, and is intended for things like dirt, gravel, stone types).\n"+TextFormatting.RED+"[Minecraft Restart Required]"+TextFormatting.RESET).getBoolean();
+		stalactiteChance = cfg.get(Configuration.CATEGORY_GENERAL, "Stalactite spawn chance", 20, "The chance that a stalactite generates in The Beneath (higher number increases the chance, lower decreases it). Setting it to 0 stops stalactite generation\\n[range: 0 ~ 100, default: 20]", 0, 100).getInt();
+		stalagmiteChance = cfg.get(Configuration.CATEGORY_GENERAL, "Stalagmite spawn chance", 20, "The chance that a stalagmite generates in The Beneath (higher number increases the chance, lower decreases it). Setting it to 0 stops stalagmite generation\\n[range: 0 ~ 100, default: 20]", 0, 100).getInt();
 
 		darkTimer = MathHelper.clamp_int(darkTimer, 1, 10);
 		darkDamage = MathHelper.clamp_int(darkDamage, 2, 20);
@@ -202,6 +209,8 @@ public class Beneath {
 		blue = MathHelper.clamp_double(blue, 0, 10);
 		damageMultiplier = MathHelper.clamp_double(damageMultiplier, 2, 10);
 		healthMultiplier = MathHelper.clamp_double(healthMultiplier, 2, 10);
+		stalactiteChance = MathHelper.clamp_int(stalactiteChance, 0, 100);
+		stalagmiteChance = MathHelper.clamp_int(stalagmiteChance, 0, 100);
 
 		if(mode.equalsIgnoreCase("grue") && !Loader.isModLoaded("grue"))
 			mode = "darkness";
@@ -218,7 +227,6 @@ public class Beneath {
 		return startEntityId;
 	}
 
-	@SuppressWarnings("unchecked")
 	private static void registerEntityWithEgg(Class<? extends Entity> entity, String name, int modid, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates, int primaryColor, int secondaryColor) {
 		int id = getUniqueEntityId();
 		EntityRegistry.registerModEntity(entity, name, modid, instance, trackingRange, updateFrequency, sendsVelocityUpdates, primaryColor, secondaryColor);

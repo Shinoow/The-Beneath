@@ -4,30 +4,27 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.shinoow.beneath.Beneath;
+import com.shinoow.beneath.common.entity.ai.EntityAIFleeLight;
+import com.shinoow.beneath.common.entity.ai.EntityAIFollowPlayer;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.shinoow.beneath.Beneath;
-import com.shinoow.beneath.common.entity.ai.EntityAIFleeLight;
-import com.shinoow.beneath.common.entity.ai.EntityAIFollowPlayer;
 
 public class EntityShadow extends EntityMob {
 
@@ -210,6 +207,12 @@ public class EntityShadow extends EntityMob {
 
 	@Override
 	public boolean hasCustomName() { return false; }
+
+	@Override
+	protected ResourceLocation getLootTable()
+	{
+		return Beneath.shadow_loot_table;
+	}
 
 	@Override
 	public String getName() {

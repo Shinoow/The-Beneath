@@ -2,6 +2,9 @@ package com.shinoow.beneath.common.handler;
 
 import java.util.UUID;
 
+import com.shinoow.beneath.Beneath;
+import com.shinoow.beneath.common.block.tile.TileEntityTeleporterDeepDank;
+
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -15,9 +18,6 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
-
-import com.shinoow.beneath.Beneath;
-import com.shinoow.beneath.common.block.tile.TileEntityTeleporterDeepDank;
 
 public class BeneathEventHandler {
 
