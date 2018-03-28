@@ -1,5 +1,7 @@
 package com.shinoow.beneath.client.render.entity;
 
+import com.shinoow.beneath.common.entity.EntityShadow;
+
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
@@ -7,8 +9,6 @@ import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
-
-import com.shinoow.beneath.common.entity.EntityShadow;
 
 public class RenderShadow extends RenderBiped<EntityShadow> {
 	private static final ResourceLocation mobTexture = new ResourceLocation("beneath","textures/entity/shadow.png");

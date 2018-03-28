@@ -1,12 +1,12 @@
 package com.shinoow.beneath.common.handler;
 
+import com.google.gson.JsonObject;
+import com.shinoow.beneath.common.util.JsonHelper;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
-
-import com.google.gson.JsonObject;
-import com.shinoow.beneath.common.util.JsonHelper;
 
 public class OreEntry {
 

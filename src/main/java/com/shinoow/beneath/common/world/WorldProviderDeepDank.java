@@ -1,5 +1,8 @@
 package com.shinoow.beneath.common.world;
 
+import com.shinoow.beneath.Beneath;
+import com.shinoow.beneath.common.world.gen.ChunkProviderDeepDank;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.math.Vec3d;
@@ -9,9 +12,6 @@ import net.minecraft.world.biome.BiomeProviderSingle;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.shinoow.beneath.Beneath;
-import com.shinoow.beneath.common.world.gen.ChunkProviderDeepDank;
 
 public class WorldProviderDeepDank extends WorldProvider
 {

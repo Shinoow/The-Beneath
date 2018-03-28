@@ -6,6 +6,11 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import com.shinoow.beneath.Beneath;
+import com.shinoow.beneath.common.handler.BlockDecorationHandler;
+import com.shinoow.beneath.common.handler.OreEntry;
+import com.shinoow.beneath.common.handler.OreGenHandler;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.material.Material;
@@ -23,11 +28,6 @@ import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.feature.WorldGenBush;
 import net.minecraft.world.gen.feature.WorldGenDungeons;
 import net.minecraft.world.gen.feature.WorldGenLakes;
-
-import com.shinoow.beneath.Beneath;
-import com.shinoow.beneath.common.handler.BlockDecorationHandler;
-import com.shinoow.beneath.common.handler.OreEntry;
-import com.shinoow.beneath.common.handler.OreGenHandler;
 
 public class ChunkProviderDeepDank implements IChunkGenerator
 {
@@ -381,6 +381,94 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 			net.minecraftforge.event.ForgeEventFactory.onChunkPopulate(false, this, world, rand, x, z, false);
 			net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.terraingen.DecorateBiomeEvent.Pre(world, rand, blockpos));
 		}
+
+		if(Beneath.stalactiteChance > 0)
+			for(int k = 0; k < Beneath.stalactiteChance; k++) {
+				int i1 = rand.nextInt(22) + 2;
+				int j1 = rand.nextInt(256);
+				int k1 = rand.nextInt(22) + 2;
+				BlockPos pos1 = blockpos.add(i1, j1, k1);
+
+				if(!world.isAirBlock(pos1) && world.isAirBlock(pos1.down()) && !world.isAirBlock(pos1.up())) {
+
+					int extraHeight = rand.nextInt(10);
+
+					boolean b = true;
+					for(int i2 = 1; i2 < 16+extraHeight; i2++)
+						if(!world.isAirBlock(pos1.down(i2))) {
+							b = false;
+							break;
+						}
+
+					if(b) {
+
+						IBlockState state = Blocks.STONE.getDefaultState();
+
+						for(int i3 = 0; i3 < 10 + extraHeight + rand.nextInt(5); i3++)
+							world.setBlockState(pos1.down(i3), state, 2);
+						for(int i3 = 0; i3 < 5 + extraHeight + rand.nextInt(6); i3++)
+							world.setBlockState(pos1.east().down(i3), state, 2);
+						for(int i3 = 0; i3 < 5 + extraHeight + rand.nextInt(6); i3++)
+							world.setBlockState(pos1.west().down(i3), state, 2);
+						for(int i3 = 0; i3 < 5 + extraHeight + rand.nextInt(6); i3++)
+							world.setBlockState(pos1.south().down(i3), state, 2);
+						for(int i3 = 0; i3 < 5 + extraHeight + rand.nextInt(6); i3++)
+							world.setBlockState(pos1.north().down(i3), state, 2);
+						for(int i3 = 0; i3 < 3 + extraHeight + rand.nextInt(4); i3++)
+							world.setBlockState(pos1.south().east().down(i3), state, 2);
+						for(int i3 = 0; i3 < 3 + extraHeight + rand.nextInt(4); i3++)
+							world.setBlockState(pos1.north().west().down(i3), state, 2);
+						for(int i3 = 0; i3 < 3 + extraHeight + rand.nextInt(4); i3++)
+							world.setBlockState(pos1.south().west().down(i3), state, 2);
+						for(int i3 = 0; i3 < 3 + extraHeight + rand.nextInt(4); i3++)
+							world.setBlockState(pos1.north().east().down(i3), state, 2);
+					}
+				}
+			}
+
+		if(Beneath.stalagmiteChance > 0)
+			for(int k = 0; k < Beneath.stalagmiteChance; k++) {
+				int i1 = rand.nextInt(22) + 2;
+				int j1 = rand.nextInt(256);
+				int k1 = rand.nextInt(22) + 2;
+				BlockPos pos1 = blockpos.add(i1, j1, k1);
+
+				if(!world.isAirBlock(pos1) && world.isAirBlock(pos1.up()) && !world.isAirBlock(pos1.down())) {
+
+					int extraHeight = rand.nextInt(10);
+
+					boolean b1 = true;
+					for(int i2 = 1; i2 < 16+extraHeight; i2++)
+						if(!world.isAirBlock(pos1.up(i2))) {
+							b1 = false;
+							break;
+						}
+
+					if(b1) {
+
+						IBlockState state = Blocks.STONE.getDefaultState();
+
+						for(int i3 = 0; i3 < 10 + extraHeight + rand.nextInt(5); i3++)
+							world.setBlockState(pos1.up(i3), state, 2);
+						for(int i3 = 0; i3 < 5 + extraHeight + rand.nextInt(6); i3++)
+							world.setBlockState(pos1.east().up(i3), state, 2);
+						for(int i3 = 0; i3 < 5 + extraHeight + rand.nextInt(6); i3++)
+							world.setBlockState(pos1.west().up(i3), state, 2);
+						for(int i3 = 0; i3 < 5 + extraHeight + rand.nextInt(6); i3++)
+							world.setBlockState(pos1.south().up(i3), state, 2);
+						for(int i3 = 0; i3 < 5 + extraHeight + rand.nextInt(6); i3++)
+							world.setBlockState(pos1.north().up(i3), state, 2);
+						for(int i3 = 0; i3 < 3 + extraHeight + rand.nextInt(4); i3++)
+							world.setBlockState(pos1.south().east().up(i3), state, 2);
+						for(int i3 = 0; i3 < 3 + extraHeight + rand.nextInt(4); i3++)
+							world.setBlockState(pos1.north().west().up(i3), state, 2);
+						for(int i3 = 0; i3 < 3 + extraHeight + rand.nextInt(4); i3++)
+							world.setBlockState(pos1.south().west().up(i3), state, 2);
+						for(int i3 = 0; i3 < 3 + extraHeight + rand.nextInt(4); i3++)
+							world.setBlockState(pos1.north().east().up(i3), state, 2);
+					}
+				}
+			}
 
 		if (net.minecraftforge.event.terraingen.TerrainGen.decorate(world, rand, blockpos, net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.SHROOM))
 		{

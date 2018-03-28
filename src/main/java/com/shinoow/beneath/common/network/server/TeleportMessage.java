@@ -2,17 +2,17 @@ package com.shinoow.beneath.common.network.server;
 
 import java.io.IOException;
 
+import com.shinoow.beneath.Beneath;
+import com.shinoow.beneath.common.block.tile.TileEntityTeleporterDeepDank;
+import com.shinoow.beneath.common.network.AbstractMessage.AbstractServerMessage;
+import com.shinoow.beneath.common.world.TeleporterDeepDank;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
-
-import com.shinoow.beneath.Beneath;
-import com.shinoow.beneath.common.block.tile.TileEntityTeleporterDeepDank;
-import com.shinoow.beneath.common.network.AbstractMessage.AbstractServerMessage;
-import com.shinoow.beneath.common.world.TeleporterDeepDank;
 
 public class TeleportMessage extends AbstractServerMessage<TeleportMessage> {
 
