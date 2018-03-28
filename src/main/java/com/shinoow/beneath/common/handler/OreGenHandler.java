@@ -3,13 +3,13 @@ package com.shinoow.beneath.common.handler;
 import java.io.File;
 import java.util.List;
 
-import net.minecraft.init.Blocks;
-
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.shinoow.beneath.common.util.JsonHelper;
+
+import net.minecraft.init.Blocks;
 
 public class OreGenHandler {
 

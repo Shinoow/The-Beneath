@@ -1,5 +1,9 @@
 package com.shinoow.beneath.common.network;
 
+import com.shinoow.beneath.Beneath;
+import com.shinoow.beneath.common.network.client.SetTimerMessage;
+import com.shinoow.beneath.common.network.server.TeleportMessage;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -7,10 +11,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
-
-import com.shinoow.beneath.Beneath;
-import com.shinoow.beneath.common.network.client.SetTimerMessage;
-import com.shinoow.beneath.common.network.server.TeleportMessage;
 
 /**
  *

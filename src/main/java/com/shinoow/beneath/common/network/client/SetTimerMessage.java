@@ -2,12 +2,12 @@ package com.shinoow.beneath.common.network.client;
 
 import java.io.IOException;
 
+import com.shinoow.beneath.client.handler.BeneathClientEventHandler;
+import com.shinoow.beneath.common.network.AbstractMessage.AbstractClientMessage;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.relauncher.Side;
-
-import com.shinoow.beneath.client.handler.BeneathClientEventHandler;
-import com.shinoow.beneath.common.network.AbstractMessage.AbstractClientMessage;
 
 public class SetTimerMessage extends AbstractClientMessage<SetTimerMessage> {
 

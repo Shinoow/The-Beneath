@@ -2,10 +2,10 @@ package com.shinoow.beneath.common.entity.ai;
 
 import java.util.List;
 
+import com.shinoow.beneath.common.entity.EntityShadow;
+
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
-
-import com.shinoow.beneath.common.entity.EntityShadow;
 
 public class EntityAIFollowPlayer extends EntityAIBase
 {

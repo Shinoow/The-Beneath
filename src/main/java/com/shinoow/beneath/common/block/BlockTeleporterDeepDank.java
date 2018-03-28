@@ -1,5 +1,10 @@
 package com.shinoow.beneath.common.block;
 
+import com.shinoow.beneath.Beneath;
+import com.shinoow.beneath.common.block.tile.TileEntityTeleporterDeepDank;
+import com.shinoow.beneath.common.network.PacketDispatcher;
+import com.shinoow.beneath.common.network.server.TeleportMessage;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -10,12 +15,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-
-import com.shinoow.beneath.Beneath;
-import com.shinoow.beneath.common.block.tile.TileEntityTeleporterDeepDank;
-import com.shinoow.beneath.common.network.PacketDispatcher;
-import com.shinoow.beneath.common.network.server.TeleportMessage;
 
 public class BlockTeleporterDeepDank extends Block implements ITileEntityProvider {
 
@@ -36,8 +37,12 @@ public class BlockTeleporterDeepDank extends Block implements ITileEntityProvide
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
-		if(worldIn.isRemote && playerIn.getDistanceSq(pos) <= 8.5)
-			PacketDispatcher.sendToServer(new TeleportMessage(pos));
+		if(worldIn.isRemote)
+			if(playerIn.getDistanceSq(pos) <= 8.5) {
+				if(playerIn.posY >= pos.getY() && playerIn.posY <= pos.getY()+1)
+					PacketDispatcher.sendToServer(new TeleportMessage(pos));
+				else playerIn.sendStatusMessage(new TextComponentString("You need to be at the same Y-level as the teleporter!"), true);
+			} else playerIn.sendStatusMessage(new TextComponentString("You're standing too far away from the teleporter!"), true);
 
 		return true;
 	}
