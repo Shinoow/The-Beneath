@@ -53,7 +53,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 @Mod(modid = Beneath.modid, name = Beneath.name, version = Beneath.version, dependencies = "required-after:forge@[forgeversion,);after:grue@[1.3.4,)", acceptedMinecraftVersions = "[1.11.2]", guiFactory = "com.shinoow.beneath.client.config.BeneathGuiFactory", useMetadata = false, updateJSON = "https://raw.githubusercontent.com/Shinoow/The-Beneath/master/version.json", certificateFingerprint = "cert_fingerprint")
 public class Beneath {
 
-	public static final String version = "1.3.0";
+	public static final String version = "beneath_version";
 	public static final String modid = "beneath";
 	public static final String name = "The Beneath";
 

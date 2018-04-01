@@ -13,7 +13,7 @@ buildscript {
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
-		classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.5"
+		classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.9"
     }
 }
 apply plugin: 'java'
@@ -47,6 +47,7 @@ minecraft {
 
 	replaceIn "Beneath.java"
         replace "forgeversion", props.forge_version
+		replace "beneath_version", props.beneath_version
 		replace "cert_fingerprint", project.findProperty('signSHA1')
 }
 
