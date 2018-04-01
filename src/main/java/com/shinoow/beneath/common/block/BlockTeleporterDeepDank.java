@@ -37,8 +37,11 @@ public class BlockTeleporterDeepDank extends Block implements ITileEntityProvide
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
+		double xdiff = playerIn.getPosition().getX() - pos.getX();
+		double zdiff = playerIn.getPosition().getZ() - pos.getZ();
+
 		if(worldIn.isRemote)
-			if(playerIn.getDistanceSq(pos) <= 8.5) {
+			if(xdiff <= 2 && xdiff >= -2 && zdiff <= 2 && zdiff >= -2) {
 				if(playerIn.posY >= pos.getY() && playerIn.posY <= pos.getY()+1)
 					PacketDispatcher.sendToServer(new TeleportMessage(pos));
 				else playerIn.sendStatusMessage(new TextComponentString("You need to be at the same Y-level as the teleporter!"), true);

@@ -67,7 +67,7 @@ public class TeleporterDeepDank extends Teleporter {
 			}
 			if(entity.dimension == 1) entity.setPositionAndUpdate(pos.getX(), pos.getY() + 1, pos.getZ());
 		}
-		entity.setPosition(MathHelper.floor(entity.posX), MathHelper.floor(entity.posY), MathHelper.floor(entity.posZ));
+		entity.setPosition(MathHelper.floor(entity.posX < pos.getX() ? pos.getX() - 1 : entity.posX), MathHelper.floor(entity.posY), MathHelper.floor(entity.posZ < pos.getZ() ? pos.getZ() - 1 : entity.posZ));
 		entity.motionX = entity.motionY = entity.motionZ = 0;
 		if(entity.dimension == Beneath.dim)
 			worldServer.playSound(null, entity.getPosition(), getSound(entity, worldServer.rand), SoundCategory.HOSTILE, 1, 1);

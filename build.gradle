@@ -47,6 +47,7 @@ minecraft {
 
 	replaceIn "Beneath.java"
         replace "forgeversion", props.forge_version
+		replace "beneath_version", props.beneath_version
 		replace "cert_fingerprint", project.findProperty('signSHA1')
 }
 
