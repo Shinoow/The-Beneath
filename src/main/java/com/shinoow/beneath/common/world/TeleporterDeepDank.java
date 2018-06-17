@@ -34,7 +34,7 @@ public class TeleporterDeepDank extends Teleporter {
 
 	@Override
 	public void placeInPortal(Entity entity, float par8){
-		if(worldServer.getBlockState(pos).getBlock() != Beneath.teleporter && entity.dimension == Beneath.dim){
+		if(worldServer.getBlockState(pos).getBlock() != Beneath.teleporter && worldServer.provider.getDimension() == Beneath.dim){
 			for(int x = -2; x < 3; x++)
 				for(int y = -1; y < 3; y++)
 					for(int z = -2; z < 3; z++)
@@ -65,11 +65,11 @@ public class TeleporterDeepDank extends Teleporter {
 				double z = pos.getZ() > entity.posZ ? pos.getZ() - 0.5 : pos.getZ() + 1.5;
 				entity.setPositionAndUpdate(MathHelper.floor(x), MathHelper.floor(entity.posY), MathHelper.floor(z));
 			}
-			if(entity.dimension == 1) entity.setPositionAndUpdate(pos.getX(), pos.getY() + 1, pos.getZ());
+			if(worldServer.provider.getDimension() == 1) entity.setPositionAndUpdate(pos.getX(), pos.getY() + 1, pos.getZ());
 		}
 		entity.setPosition(MathHelper.floor(entity.posX < pos.getX() ? pos.getX() - 1 : entity.posX), MathHelper.floor(entity.posY), MathHelper.floor(entity.posZ < pos.getZ() ? pos.getZ() - 1 : entity.posZ));
 		entity.motionX = entity.motionY = entity.motionZ = 0;
-		if(entity.dimension == Beneath.dim)
+		if(worldServer.provider.getDimension() == Beneath.dim)
 			worldServer.playSound(null, entity.getPosition(), getSound(entity, worldServer.rand), SoundCategory.HOSTILE, 1, 1);
 	}
 
