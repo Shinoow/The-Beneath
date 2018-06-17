@@ -43,7 +43,9 @@ public class BlockTeleporterDeepDank extends Block implements ITileEntityProvide
 		if(worldIn.isRemote)
 			if(xdiff <= 2 && xdiff >= -2 && zdiff <= 2 && zdiff >= -2) {
 				if(playerIn.posY >= pos.getY() && playerIn.posY <= pos.getY()+1)
-					PacketDispatcher.sendToServer(new TeleportMessage(pos));
+					if(playerIn.dimension == 0 || playerIn.dimension == Beneath.dim || Beneath.dimTeleportation)
+						PacketDispatcher.sendToServer(new TeleportMessage(pos));
+					else playerIn.sendStatusMessage(new TextComponentString("Beneath teleporters don't work outside the Overworld!"), true);
 				else playerIn.sendStatusMessage(new TextComponentString("You need to be at the same Y-level as the teleporter!"), true);
 			} else playerIn.sendStatusMessage(new TextComponentString("You're standing too far away from the teleporter!"), true);
 
