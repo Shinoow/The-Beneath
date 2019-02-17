@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class BeneathClientEventHandler {
 
 	private static int timer = 0;
+	private final ResourceLocation hand = new ResourceLocation("beneath", "textures/misc/shadow_hand.png");
 
 	public static void startTimer(){
 		timer = 60;
@@ -23,7 +24,6 @@ public class BeneathClientEventHandler {
 	public void overlay(RenderGameOverlayEvent.Pre event){
 		if(event.getType() != ElementType.CROSSHAIRS) return;
 		if(timer == 0) return;
-		final ResourceLocation hand = new ResourceLocation("beneath", "textures/misc/shadow_hand.png");
 
 		if(timer > 0){
 			if(Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {

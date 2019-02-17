@@ -1,8 +1,8 @@
 {
   "homepage": "https://minecraft.curseforge.com/projects/the-beneath",
   "promos": {
-    "1.12.2-latest": "1.4.2",
-    "1.12.2-recommended": "1.4.2",
+    "1.12.2-latest": "1.5.0",
+    "1.12.2-recommended": "1.5.0",
     "1.12-latest": "1.2.0",
     "1.12-recommended": "1.2.0",
     "1.11.2-latest": "1.4.2",
@@ -13,6 +13,7 @@
     "1.10.2-recommended": "1.4.2"
   },
   "1.12.2": {
+  "1.5.0": "- Added a third mode that disables the darkness damage (called 'none')\n- Added a config option to toggle the shadow hands that the shadows use to drag you into the darkness\n- Added Russian translation (courtesy of TimeConqueror)",
 	"1.4.2": "- Teleporters no longer function outside the Overworld unless \"Additional Dimension Teleportation\" is enabled (as it was meant to be)",
 	"1.4.1": "- Teleporting to/from The Beneath should no longer get you stuck in any walls\n- You can no longer teleport to The Beneath while riding something",
 	"1.4.0": "- Restricted the Y-level you have to be in relation to the teleporter block (in order to ensure players always spawn on the platform)\n- The spawn platform inside The Beneath is now made out of Cobblestone instead of regular Stone\n- Added stalactites and stalagmites that generates throughout the dimension (both configurable)\n- Added an empty loot table to the Shadows",

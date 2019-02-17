@@ -30,7 +30,6 @@ public class EntityHand extends Entity {
 	public EntityHand(World world, EntityShadow entity, Entity target) {
 		super(world);
 		shadow = entity;
-		entity.setHand(this);
 		setLocationAndAngles(entity.posX, entity.posY + 1.62, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 		posX -= MathHelper.cos(rotationYaw / 180.0F * (float)Math.PI) * 0.16F;
 		posY -= 0.1;
@@ -46,7 +45,6 @@ public class EntityHand extends Entity {
 			double dX = motionX / vH;
 			double dZ = motionZ / vH;
 			setLocationAndAngles(entity.posX + dX, posY, entity.posZ + dZ, rotationYaw, rotationPitch);
-			//            this.yOffset = 0.0F;
 			calculateVelocity(motionX, motionY + vH * 0.2, motionZ, 1.0F, 14 - (world.getDifficulty().getDifficultyId() << 2));
 		}
 		updateAnglerId();
@@ -199,13 +197,6 @@ public class EntityHand extends Entity {
 
 	protected float getGravityVelocity() {
 		return 0.03F;
-	}
-
-	@Override
-	public void setDead() {
-		if (shadow != null)
-			shadow.setHand(null);
-		super.setDead();
 	}
 
 	@Override

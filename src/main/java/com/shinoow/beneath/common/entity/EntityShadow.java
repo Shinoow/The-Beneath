@@ -92,32 +92,24 @@ public class EntityShadow extends EntityMob {
 		if(dimension != Beneath.dim)
 			world.removeEntity(this);
 
-		if (cooldown > 0)
-			cooldown--;
-		if (!world.isRemote && cooldown <= 0 && rand.nextBoolean()) {
-			List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, getEntityBoundingBox().expand(16, 16, 16));
-			if(!players.isEmpty())
-				for(EntityPlayer target : players)
-					if (target != null && !target.capabilities.isCreativeMode && world.getLight(target.getPosition()) >= 5) {
-						float distanceSq = (float)getDistanceSqToEntity(target);
-						if (distanceSq > 9.0F && distanceSq < 100.0F && getEntitySenses().canSee(target)) {
-							new EntityHand(world, this, target);
-							world.spawnEntity(getHand());
-							cooldown = 200 + rand.nextInt(32);
-							break;
+		if(Beneath.shadowHand) {
+			if (cooldown > 0)
+				cooldown--;
+			if (!world.isRemote && cooldown <= 0 && rand.nextBoolean()) {
+				List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, getEntityBoundingBox().expand(16, 16, 16));
+				if(!players.isEmpty())
+					for(EntityPlayer target : players)
+						if (target != null && !target.capabilities.isCreativeMode && world.getLight(target.getPosition()) >= 5) {
+							float distanceSq = (float)getDistanceSqToEntity(target);
+							if (distanceSq > 9.0F && distanceSq < 100.0F && getEntitySenses().canSee(target)) {
+								world.spawnEntity(new EntityHand(world, this, target));
+								cooldown = 200 + rand.nextInt(32);
+								break;
+							}
 						}
-					}
+			}
 		}
 		super.onLivingUpdate();
-	}
-
-
-	public void setHand(EntityHand hand) {
-		this.hand = hand;
-	}
-
-	public EntityHand getHand() {
-		return hand;
 	}
 
 	protected boolean teleportRandomly()

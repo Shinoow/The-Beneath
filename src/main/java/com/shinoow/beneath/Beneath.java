@@ -76,7 +76,7 @@ public class Beneath {
 
 	public static int dim, darkTimer, darkDamage, dungeonChance, shadowSpawnWeight, lakeChance, stalactiteChance, stalagmiteChance;
 	public static String mode;
-	public static boolean internalOreGen, keepLoaded, dimTeleportation, disableMobSpawning, useCraftingRecipe, teleportTorches, useDecorator;
+	public static boolean internalOreGen, keepLoaded, dimTeleportation, disableMobSpawning, useCraftingRecipe, teleportTorches, useDecorator, shadowHand;
 	public static double red, green, blue, damageMultiplier, healthMultiplier;
 	private static String[] craftingRecipe, fluidBlocks;
 
@@ -202,7 +202,7 @@ public class Beneath {
 	private static void syncConfig(){
 
 		dim = cfg.get(Configuration.CATEGORY_GENERAL, "Dimension ID", 10, "Dimension ID for The Beneath.").getInt();
-		mode = cfg.get(Configuration.CATEGORY_GENERAL, "Mode", Loader.isModLoaded("grue") ? "grue" : "darkness", "What mode The Beneath is set to. Current modes are:\ngrue: Grues spawn in the darkness\ndarkness: You take damage while in dark areas.\n"+TextFormatting.RED+"[Minecraft Restart Required]"+TextFormatting.RESET).getString();
+		mode = cfg.get(Configuration.CATEGORY_GENERAL, "Mode", Loader.isModLoaded("grue") ? "grue" : "darkness", "What mode The Beneath is set to. Current modes are:\ngrue: Grues spawn in the darkness\ndarkness: You take damage while in dark areas.\nnone: Disables darkness damage\n"+TextFormatting.RED+"[Minecraft Restart Required]"+TextFormatting.RESET).getString();
 		internalOreGen = cfg.get(Configuration.CATEGORY_GENERAL, "Internal Ore Generator", true, "Toggles whether or not to use the built-in Ore Generator. Can be disabled if you have another mod that handles Ore Generation.\n"+TextFormatting.RED+"[Minecraft Restart Required]"+TextFormatting.RESET).getBoolean();
 		keepLoaded = cfg.get(Configuration.CATEGORY_GENERAL, "Keep Loaded", false, "Toggles whether or not The Beneath should be prevented from automatically unloading (might affect performance if enabled).\n"+TextFormatting.RED+"[Minecraft Restart Required]"+TextFormatting.RESET).getBoolean();
 		dimTeleportation = cfg.get(Configuration.CATEGORY_GENERAL, "Additional Dimension Teleportation", false, "Toggles whether or not to allow teleporting back and forth between the Beneath and dimensions that aren't the Overworld").getBoolean();
@@ -227,6 +227,7 @@ public class Beneath {
 		useDecorator = cfg.get(Configuration.CATEGORY_GENERAL, "Use Block Decorator", true, "Toggles whether or not to use the built-in Block Decorator (functions like the Ore Generator, except it runs before it, and is intended for things like dirt, gravel, stone types).\n"+TextFormatting.RED+"[Minecraft Restart Required]"+TextFormatting.RESET).getBoolean();
 		stalactiteChance = cfg.get(Configuration.CATEGORY_GENERAL, "Stalactite spawn chance", 20, "The chance that a stalactite generates in The Beneath (higher number increases the chance, lower decreases it). Setting it to 0 stops stalactite generation\\n[range: 0 ~ 100, default: 20]", 0, 100).getInt();
 		stalagmiteChance = cfg.get(Configuration.CATEGORY_GENERAL, "Stalagmite spawn chance", 20, "The chance that a stalagmite generates in The Beneath (higher number increases the chance, lower decreases it). Setting it to 0 stops stalagmite generation\\n[range: 0 ~ 100, default: 20]", 0, 100).getInt();
+		shadowHand = cfg.get(Configuration.CATEGORY_GENERAL, "Shadow Hands", true, "Toggles whether or not shadows will be able to drag you into the dark with their hands.").getBoolean();
 
 		darkTimer = MathHelper.clamp(darkTimer, 1, 10);
 		darkDamage = MathHelper.clamp(darkDamage, 2, 20);
@@ -241,6 +242,10 @@ public class Beneath {
 
 		if(mode.equalsIgnoreCase("grue") && !Loader.isModLoaded("grue"))
 			mode = "darkness";
+		
+		if(!mode.equalsIgnoreCase("grue") && !mode.equalsIgnoreCase("darkness") && !mode.equalsIgnoreCase("none")) {
+			mode = "darkness";
+		}
 
 		if(cfg.hasChanged())
 			cfg.save();
