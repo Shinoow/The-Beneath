@@ -220,8 +220,8 @@ public class Beneath {
 		green = cfg.get(Configuration.CATEGORY_GENERAL, "Green Night Vision sky color", 0.0D, "Changes the green part of the Beneath sky color while affected by Night Vision. Client side only.\n[range: 0.0 ~ 10.0, default: 0.0]", 0.0D, 10.0D).getDouble();
 		blue = cfg.get(Configuration.CATEGORY_GENERAL, "Blue Night Vision sky color", 1.5D, "Changes the red part of the Beneath sky color while affected by Night Vision. Client side only.\n[range: 0.0 ~ 10.0, default: 1.5]", 0.0D, 10.0D).getDouble();
 		teleportTorches = cfg.get(Configuration.CATEGORY_GENERAL, "Teleporter Torches", true, "Whether or not torches should spawn on the platform generated when entering The Beneath.").getBoolean();
-		damageMultiplier = cfg.get(Configuration.CATEGORY_GENERAL, "Damage Multiplier", 2.0D, "Sets how much mob damage is multiplied by inside The Beneath\n[range: 2.0 ~ 10.0, default: 2.0]", 2.0D, 10.0D).getDouble();
-		healthMultiplier = cfg.get(Configuration.CATEGORY_GENERAL, "Health Multiplier", 2.0D, "Sets how much mob health is multiplied by inside The Beneath\n[range: 2.0 ~ 10.0, default: 2.0]", 2.0D, 10.0D).getDouble();
+		damageMultiplier = cfg.get(Configuration.CATEGORY_GENERAL, "Damage Multiplier", 2.0D, "Sets how much mob damage is multiplied by inside The Beneath\n[range: 1.0 ~ 10.0, default: 2.0]", 1.0D, 10.0D).getDouble();
+		healthMultiplier = cfg.get(Configuration.CATEGORY_GENERAL, "Health Multiplier", 2.0D, "Sets how much mob health is multiplied by inside The Beneath\n[range: 1.0 ~ 10.0, default: 2.0]", 1.0D, 10.0D).getDouble();
 		fluidBlocks = cfg.get(Configuration.CATEGORY_GENERAL, "Lake Fluid Blocks", new String[]{"minecraft:water", "minecraft:lava"}, "Any fluid blocks added to this list will randomly generate as part of lakes inside The Beneath (format is \"modid:name\")\n"+TextFormatting.RED+"[Minecraft Restart Required]"+TextFormatting.RESET).getStringList();
 		lakeChance = cfg.get(Configuration.CATEGORY_GENERAL, "Lake spawn chance", 10, "The chance that a lake generates in The Beneath (same logic as the vanilla setting). Setting it to 0 stops lake generation\n[range: 0 ~ 100, default: 10]", 0, 100).getInt();
 		useDecorator = cfg.get(Configuration.CATEGORY_GENERAL, "Use Block Decorator", true, "Toggles whether or not to use the built-in Block Decorator (functions like the Ore Generator, except it runs before it, and is intended for things like dirt, gravel, stone types).\n"+TextFormatting.RED+"[Minecraft Restart Required]"+TextFormatting.RESET).getBoolean();
@@ -235,8 +235,8 @@ public class Beneath {
 		red = MathHelper.clamp(red, 0, 10);
 		green = MathHelper.clamp(green, 0, 10);
 		blue = MathHelper.clamp(blue, 0, 10);
-		damageMultiplier = MathHelper.clamp(damageMultiplier, 2, 10);
-		healthMultiplier = MathHelper.clamp(healthMultiplier, 2, 10);
+		damageMultiplier = MathHelper.clamp(damageMultiplier, 1, 10);
+		healthMultiplier = MathHelper.clamp(healthMultiplier, 1, 10);
 		stalactiteChance = MathHelper.clamp(stalactiteChance, 0, 100);
 		stalagmiteChance = MathHelper.clamp(stalagmiteChance, 0, 100);
 

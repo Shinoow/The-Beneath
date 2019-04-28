@@ -385,7 +385,7 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 		if(Beneath.stalactiteChance > 0)
 			for(int k = 0; k < Beneath.stalactiteChance; k++) {
 				int i1 = rand.nextInt(22) + 2;
-				int j1 = rand.nextInt(256);
+				int j1 = rand.nextInt(246) + 5;
 				int k1 = rand.nextInt(22) + 2;
 				BlockPos pos1 = blockpos.add(i1, j1, k1);
 
@@ -429,7 +429,7 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 		if(Beneath.stalagmiteChance > 0)
 			for(int k = 0; k < Beneath.stalagmiteChance; k++) {
 				int i1 = rand.nextInt(22) + 2;
-				int j1 = rand.nextInt(256);
+				int j1 = rand.nextInt(246) + 5;
 				int k1 = rand.nextInt(22) + 2;
 				BlockPos pos1 = blockpos.add(i1, j1, k1);
 
@@ -483,7 +483,7 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 			for(Block block : Beneath.fluid_blocks)
 				if(rand.nextInt(Beneath.lakeChance) == 0){
 					int i1 = rand.nextInt(16) + 8;
-					int j1 = rand.nextInt(256);
+					int j1 = rand.nextInt(236) + 10;
 					int k1 = rand.nextInt(16) + 8;
 					new WorldGenLakes(block).generate(world, rand, blockpos.add(i1, j1, k1));
 				}
