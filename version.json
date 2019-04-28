@@ -13,7 +13,7 @@
     "1.10.2-recommended": "1.4.2"
   },
   "1.12.2": {
-  "1.5.1": "- Lake, stalagmite and stalagtite generation no longer pokes holes through bedrock, making it possible to get on top or below the dimension\n- The damage and health multipliers can now be set to 1 as their minimum, instead of 2",
+  "1.5.1": "- Lake, stalagmite and stalactite generation no longer pokes holes through bedrock, making it possible to get on top or below the dimension\n- The damage and health multipliers can now be set to 1 as their minimum, instead of 2",
   "1.5.0": "- Added a third mode that disables the darkness damage (called 'none')\n- Added a config option to toggle the shadow hands that the shadows use to drag you into the darkness\n- Added Russian translation (courtesy of TimeConqueror)",
 	"1.4.2": "- Teleporters no longer function outside the Overworld unless \"Additional Dimension Teleportation\" is enabled (as it was meant to be)",
 	"1.4.1": "- Teleporting to/from The Beneath should no longer get you stuck in any walls\n- You can no longer teleport to The Beneath while riding something",
