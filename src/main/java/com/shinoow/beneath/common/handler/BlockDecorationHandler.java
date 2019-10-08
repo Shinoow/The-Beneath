@@ -1,11 +1,12 @@
 package com.shinoow.beneath.common.handler;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Streams;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.shinoow.beneath.common.util.JsonHelper;
 
@@ -13,7 +14,7 @@ import net.minecraft.init.Blocks;
 
 public class BlockDecorationHandler {
 
-	static List<OreEntry> blockdeco = Lists.newArrayList();
+	static List<OreEntry> blockdeco = new ArrayList<>();
 
 	public static void setupBlockDecoFile(){
 
@@ -22,22 +23,13 @@ public class BlockDecorationHandler {
 		if(!f.exists())
 			generateDefault(f);
 		else {
-			JsonArray list = JsonHelper.ReadArrayFromFile(f);
-			for(JsonElement e : list){
-				if(e == null || !e.isJsonObject())
-					continue;
-				blockdeco.add(new OreEntry(e.getAsJsonObject()));
-			}
+			blockdeco = Streams.stream(JsonHelper.ReadArrayFromFile(f)).filter(e -> e != null && e.isJsonObject()).map(e -> new OreEntry(e.getAsJsonObject())).collect(Collectors.toList());
 		}
 	}
 
 	public static void saveBlockDecoFile(){
 		JsonArray l = new JsonArray();
-		for(OreEntry e : blockdeco){
-			JsonObject j = new JsonObject();
-			e.writeToJson(j);
-			l.add(j);
-		}
+		blockdeco.stream().map(OreEntry::toJson).forEach(j -> l.add(j));
 		JsonHelper.WriteToFile(new File("config/beneath/blockdeco.json"), l);
 	}
 
@@ -66,11 +58,7 @@ public class BlockDecorationHandler {
 		adesite.writeToJson(jBlk);
 		list.add(jBlk);
 
-		for(JsonElement e : list){
-			if(e == null || !e.isJsonObject())
-				continue;
-			blockdeco.add(new OreEntry(e.getAsJsonObject()));
-		}
+		blockdeco = Streams.stream(list).filter(e -> e != null && e.isJsonObject()).map(e -> new OreEntry(e.getAsJsonObject())).collect(Collectors.toList());
 
 		JsonHelper.WriteToFile(f, list);
 	}

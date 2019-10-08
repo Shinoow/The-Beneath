@@ -71,4 +71,10 @@ public class OreEntry {
 		minY = JsonHelper.GetNumber(json, "miny", 10).intValue();
 		maxY = JsonHelper.GetNumber(json, "maxy", 246).intValue();
 	}
+
+	public JsonObject toJson() {
+		JsonObject json = new JsonObject();
+		writeToJson(json);
+		return json;
+	}
 }

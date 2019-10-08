@@ -1,11 +1,12 @@
 package com.shinoow.beneath.common.handler;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Streams;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.shinoow.beneath.common.util.JsonHelper;
 
@@ -13,7 +14,7 @@ import net.minecraft.init.Blocks;
 
 public class OreGenHandler {
 
-	static List<OreEntry> oregen = Lists.newArrayList();
+	static List<OreEntry> oregen = new ArrayList<>();
 
 	public static void setupOregenFile(){
 
@@ -22,22 +23,13 @@ public class OreGenHandler {
 		if(!f.exists())
 			generateDefault(f);
 		else {
-			JsonArray list = JsonHelper.ReadArrayFromFile(f);
-			for(JsonElement e : list){
-				if(e == null || !e.isJsonObject())
-					continue;
-				oregen.add(new OreEntry(e.getAsJsonObject()));
-			}
+			oregen = Streams.stream(JsonHelper.ReadArrayFromFile(f)).filter(e -> e != null && e.isJsonObject()).map(e -> new OreEntry(e.getAsJsonObject())).collect(Collectors.toList());
 		}
 	}
 
 	public static void saveOregenFile(){
 		JsonArray l = new JsonArray();
-		for(OreEntry e : oregen){
-			JsonObject j = new JsonObject();
-			e.writeToJson(j);
-			l.add(j);
-		}
+		oregen.stream().map(OreEntry::toJson).forEach(j -> l.add(j));
 		JsonHelper.WriteToFile(new File("config/beneath/oregen.json"), l);
 	}
 
@@ -77,11 +69,7 @@ public class OreGenHandler {
 		silverfish.writeToJson(jBlk);
 		list.add(jBlk);
 
-		for(JsonElement e : list){
-			if(e == null || !e.isJsonObject())
-				continue;
-			oregen.add(new OreEntry(e.getAsJsonObject()));
-		}
+		oregen = Streams.stream(list).filter(e -> e != null && e.isJsonObject()).map(e -> new OreEntry(e.getAsJsonObject())).collect(Collectors.toList());
 
 		JsonHelper.WriteToFile(f, list);
 	}

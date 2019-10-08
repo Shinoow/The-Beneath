@@ -15,6 +15,7 @@ import com.google.common.collect.Lists;
 import com.shinoow.beneath.common.CommonProxy;
 import com.shinoow.beneath.common.block.BlockTeleporterDeepDank;
 import com.shinoow.beneath.common.block.tile.TileEntityTeleporterDeepDank;
+import com.shinoow.beneath.common.command.CommandReload;
 import com.shinoow.beneath.common.entity.EntityHand;
 import com.shinoow.beneath.common.entity.EntityShadow;
 import com.shinoow.beneath.common.handler.BeneathEventHandler;
@@ -153,7 +154,7 @@ public class Beneath {
 			BlockDecorationHandler.setupBlockDecoFile();
 			BlockDecorationHandler.saveBlockDecoFile();
 		}
-		fluid_blocks = Arrays.stream(fluidBlocks).map(s -> ForgeRegistries.BLOCKS.getValue(new ResourceLocation(s))).collect(Collectors.toList());
+		fluid_blocks = Arrays.stream(fluidBlocks).map(s -> ForgeRegistries.BLOCKS.getValue(new ResourceLocation(s.trim()))).filter(b -> b != null).collect(Collectors.toList());
 		updateTerrainBlock();
 		proxy.init();
 	}
@@ -165,6 +166,11 @@ public class Beneath {
 	}
 
 	@EventHandler
+	public void serverStarting(FMLServerStartingEvent event){
+		event.registerServerCommand(new CommandReload());
+	}
+
+	@EventHandler
 	public void onFingerprintViolation(FMLFingerprintViolationEvent event) {
 		LOGGER.log(Level.WARN, "Invalid fingerprint detected! The file " + event.getSource().getName() + " may have been tampered with. This version will NOT be supported by the author!");
 	}
@@ -173,7 +179,7 @@ public class Beneath {
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
 		if(eventArgs.getModID().equals("beneath")) {
 			syncConfig();
-			fluid_blocks = Arrays.stream(fluidBlocks).map(s -> ForgeRegistries.BLOCKS.getValue(new ResourceLocation(s))).collect(Collectors.toList());
+			fluid_blocks = Arrays.stream(fluidBlocks).map(s -> ForgeRegistries.BLOCKS.getValue(new ResourceLocation(s))).filter(b -> b != null).collect(Collectors.toList());
 			updateTerrainBlock();
 		}
 	}
