@@ -371,13 +371,13 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 	public void populate(int x, int z)
 	{
 		BlockFalling.fallInstantly = true;
-		if(!Beneath.internalOreGen)
+		if(Beneath.otherModWorldgen)
 			net.minecraftforge.event.ForgeEventFactory.onChunkPopulate(true, this, world, rand, x, z, false);
 		int i = x * 16;
 		int j = z * 16;
 		BlockPos blockpos = new BlockPos(i, 0, j);
 
-		if(!Beneath.internalOreGen){
+		if(Beneath.otherModWorldgen){
 			net.minecraftforge.event.ForgeEventFactory.onChunkPopulate(false, this, world, rand, x, z, false);
 			net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.terraingen.DecorateBiomeEvent.Pre(world, rand, blockpos));
 		}
@@ -524,7 +524,7 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 				}
 			}
 
-		if(!Beneath.internalOreGen)
+		if(Beneath.otherModWorldgen)
 			net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.terraingen.DecorateBiomeEvent.Post(world, rand, blockpos));
 
 		BlockFalling.fallInstantly = false;

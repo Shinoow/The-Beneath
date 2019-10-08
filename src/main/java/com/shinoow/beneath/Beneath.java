@@ -5,6 +5,8 @@ import java.net.URL;
 import java.util.List;
 
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.Lists;
 import com.shinoow.beneath.common.CommonProxy;
@@ -76,7 +78,7 @@ public class Beneath {
 
 	public static int dim, darkTimer, darkDamage, dungeonChance, shadowSpawnWeight, lakeChance, stalactiteChance, stalagmiteChance;
 	public static String mode;
-	public static boolean internalOreGen, keepLoaded, dimTeleportation, disableMobSpawning, useCraftingRecipe, teleportTorches, useDecorator, shadowHand;
+	public static boolean internalOreGen, keepLoaded, dimTeleportation, disableMobSpawning, useCraftingRecipe, teleportTorches, useDecorator, shadowHand, otherModWorldgen;
 	public static double red, green, blue, damageMultiplier, healthMultiplier;
 	private static String[] craftingRecipe, fluidBlocks;
 
@@ -92,6 +94,8 @@ public class Beneath {
 	public static SoundEvent beneath_normal, beneath_muffled, beneath_drawnout, deepdank, dark1, dark2, scream;
 
 	public static final ResourceLocation shadow_loot_table = LootTableList.register(new ResourceLocation(modid, "entities/shadow"));
+
+	public static Logger LOGGER = LogManager.getLogger("The Beneath");
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event){
@@ -155,7 +159,7 @@ public class Beneath {
 
 	@EventHandler
 	public void onFingerprintViolation(FMLFingerprintViolationEvent event) {
-		FMLLog.log("The Beneath", Level.WARN, "Invalid fingerprint detected! The file " + event.getSource().getName() + " may have been tampered with. This version will NOT be supported by the author!");
+		LOGGER.log(Level.WARN, "Invalid fingerprint detected! The file " + event.getSource().getName() + " may have been tampered with. This version will NOT be supported by the author!");
 	}
 
 	@SubscribeEvent
@@ -228,6 +232,7 @@ public class Beneath {
 		stalactiteChance = cfg.get(Configuration.CATEGORY_GENERAL, "Stalactite spawn chance", 20, "The chance that a stalactite generates in The Beneath (higher number increases the chance, lower decreases it). Setting it to 0 stops stalactite generation\\n[range: 0 ~ 100, default: 20]", 0, 100).getInt();
 		stalagmiteChance = cfg.get(Configuration.CATEGORY_GENERAL, "Stalagmite spawn chance", 20, "The chance that a stalagmite generates in The Beneath (higher number increases the chance, lower decreases it). Setting it to 0 stops stalagmite generation\\n[range: 0 ~ 100, default: 20]", 0, 100).getInt();
 		shadowHand = cfg.get(Configuration.CATEGORY_GENERAL, "Shadow Hands", true, "Toggles whether or not shadows will be able to drag you into the dark with their hands.").getBoolean();
+		otherModWorldgen = cfg.get(Configuration.CATEGORY_GENERAL, "Other Mod World Generation", false, "Toggles whether or not other mods should be able to interfere with the terrain generation of The Beneath.").getBoolean();
 
 		darkTimer = MathHelper.clamp(darkTimer, 1, 10);
 		darkDamage = MathHelper.clamp(darkDamage, 2, 20);
@@ -293,7 +298,7 @@ public class Beneath {
 			nameFile.close();
 
 		} catch (IOException e) {
-			FMLLog.log("The Beneath", Level.ERROR, "Failed to fetch supporter list, using local version!");
+			LOGGER.log(Level.ERROR, "Failed to fetch supporter list, using local version!");
 			names = "Tedyhere";
 		}
 
