@@ -28,8 +28,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityShadow extends EntityMob {
 
-	private EntityHand hand = null;
-
 	public int cooldown = 0;
 
 	public EntityShadow(World worldIn) {

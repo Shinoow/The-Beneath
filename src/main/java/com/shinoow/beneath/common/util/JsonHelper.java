@@ -9,8 +9,6 @@ import org.apache.logging.log4j.Level;
 import com.google.gson.*;
 import com.shinoow.beneath.Beneath;
 
-import net.minecraftforge.fml.common.FMLLog;
-
 /**
  * Used to read JSON data with pre-made checks for null entries and casting.</br>
  * In the event the requested value is missing, it will be added to the JSON object

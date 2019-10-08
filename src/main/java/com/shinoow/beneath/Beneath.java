@@ -11,7 +11,6 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.common.collect.Lists;
 import com.shinoow.beneath.common.CommonProxy;
 import com.shinoow.beneath.common.block.BlockTeleporterDeepDank;
 import com.shinoow.beneath.common.block.tile.TileEntityTeleporterDeepDank;
@@ -102,7 +101,7 @@ public class Beneath {
 	public static final ResourceLocation shadow_loot_table = LootTableList.register(new ResourceLocation(modid, "entities/shadow"));
 
 	public static IBlockState STONE;
-	
+
 	public static Logger LOGGER = LogManager.getLogger("The Beneath");
 
 	@EventHandler
@@ -265,10 +264,9 @@ public class Beneath {
 
 		if(mode.equalsIgnoreCase("grue") && !Loader.isModLoaded("grue"))
 			mode = "darkness";
-		
-		if(!mode.equalsIgnoreCase("grue") && !mode.equalsIgnoreCase("darkness") && !mode.equalsIgnoreCase("none")) {
+
+		if(!mode.equalsIgnoreCase("grue") && !mode.equalsIgnoreCase("darkness") && !mode.equalsIgnoreCase("none"))
 			mode = "darkness";
-		}
 
 		if(cfg.hasChanged())
 			cfg.save();
@@ -309,11 +307,10 @@ public class Beneath {
 	private void updateTerrainBlock() {
 		try {
 			String[] parts = stoneBlock.split(":");
-			if(parts.length == 3) {
+			if(parts.length == 3)
 				STONE = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(parts[0], parts[1])).getStateFromMeta(Integer.valueOf(parts[2]));
-			} else {
+			else
 				STONE = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(stoneBlock)).getDefaultState();
-			}
 		} catch(Exception e) {
 			LOGGER.log(Level.ERROR, "{} is not a valid block, defaulting to minecraft:stone", stoneBlock);
 			STONE = Blocks.STONE.getDefaultState();
@@ -321,7 +318,7 @@ public class Beneath {
 		deep_dank.topBlock = STONE;
 		deep_dank.fillerBlock = STONE;
 	}
-	
+
 	private String getSupporterList(){
 		BufferedReader nameFile;
 		String names = "";

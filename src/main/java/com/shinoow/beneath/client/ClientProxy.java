@@ -4,17 +4,20 @@ import com.shinoow.beneath.Beneath;
 import com.shinoow.beneath.client.handler.BeneathClientEventHandler;
 import com.shinoow.beneath.client.render.entity.RenderHand;
 import com.shinoow.beneath.client.render.entity.RenderShadow;
+import com.shinoow.beneath.client.render.entity.layers.LayerStarSpawnTentacles;
 import com.shinoow.beneath.common.CommonProxy;
 import com.shinoow.beneath.common.entity.EntityHand;
 import com.shinoow.beneath.common.entity.EntityShadow;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.IThreadListener;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class ClientProxy extends CommonProxy {
@@ -30,6 +33,12 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void init(){
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(Beneath.teleporter), 0, new ModelResourceLocation("beneath:teleporterbeneath", "inventory"));
+		if(!Loader.isModLoaded("abyssalcraft") && !Loader.isModLoaded("grue") && !Loader.isModLoaded("hungeringdarkness")){
+			RenderPlayer render1 = Minecraft.getMinecraft().getRenderManager().getSkinMap().get("default");
+			render1.addLayer(new LayerStarSpawnTentacles(render1));
+			RenderPlayer render2 = Minecraft.getMinecraft().getRenderManager().getSkinMap().get("slim");
+			render2.addLayer(new LayerStarSpawnTentacles(render2));
+		}
 	}
 
 	@Override

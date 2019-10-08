@@ -538,9 +538,7 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 	@Override
 	public List<Biome.SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos)
 	{
-		if(Beneath.disableMobSpawning) return Collections.emptyList();
-		Biome biome = world.getBiome(pos);
-		return biome.getSpawnableList(creatureType);
+		return Beneath.disableMobSpawning ? Collections.emptyList() : world.getBiome(pos).getSpawnableList(creatureType);
 	}
 
 	@Override

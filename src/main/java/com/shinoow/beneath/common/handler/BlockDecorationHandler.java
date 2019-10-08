@@ -22,9 +22,8 @@ public class BlockDecorationHandler {
 
 		if(!f.exists())
 			generateDefault(f);
-		else {
+		else
 			blockdeco = Streams.stream(JsonHelper.ReadArrayFromFile(f)).filter(e -> e != null && e.isJsonObject()).map(e -> new OreEntry(e.getAsJsonObject())).collect(Collectors.toList());
-		}
 	}
 
 	public static void saveBlockDecoFile(){

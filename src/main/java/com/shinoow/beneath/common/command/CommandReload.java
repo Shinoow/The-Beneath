@@ -25,23 +25,25 @@ public class CommandReload extends CommandBase {
 
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-		if(!sender.getEntityWorld().isRemote){
+		if(!sender.getEntityWorld().isRemote)
 			if(args.length == 1) {
 				if(args[0].equals("reloadAll")) {
 					OreGenHandler.setupOregenFile();
 					OreGenHandler.saveOregenFile();
 					BlockDecorationHandler.setupBlockDecoFile();
 					BlockDecorationHandler.saveBlockDecoFile();
+					sender.sendMessage(new TextComponentString("Reload complete!"));
 				} else if(args[0].equals("reloadOres")) {
 					OreGenHandler.setupOregenFile();
 					OreGenHandler.saveOregenFile();
+					sender.sendMessage(new TextComponentString("Reload complete!"));
 				} else if(args[0].equals("reloadDeco")) {
 					BlockDecorationHandler.setupBlockDecoFile();
 					BlockDecorationHandler.saveBlockDecoFile();
-				}
-			} else {
+					sender.sendMessage(new TextComponentString("Reload complete!"));
+				} else
+					sender.sendMessage(new TextComponentString(getUsage(sender)));
+			} else
 				sender.sendMessage(new TextComponentString(getUsage(sender)));
-			}
-		}
 	}
 }

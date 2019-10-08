@@ -22,9 +22,8 @@ public class OreGenHandler {
 
 		if(!f.exists())
 			generateDefault(f);
-		else {
+		else
 			oregen = Streams.stream(JsonHelper.ReadArrayFromFile(f)).filter(e -> e != null && e.isJsonObject()).map(e -> new OreEntry(e.getAsJsonObject())).collect(Collectors.toList());
-		}
 	}
 
 	public static void saveOregenFile(){
