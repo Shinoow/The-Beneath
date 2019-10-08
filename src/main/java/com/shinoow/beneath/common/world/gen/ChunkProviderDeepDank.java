@@ -32,7 +32,6 @@ import net.minecraft.world.gen.feature.WorldGenLakes;
 public class ChunkProviderDeepDank implements IChunkGenerator
 {
 	protected static final IBlockState AIR = Blocks.AIR.getDefaultState();
-	protected static final IBlockState STONE = Blocks.STONE.getDefaultState();
 	protected static final IBlockState BEDROCK = Blocks.BEDROCK.getDefaultState();
 	protected static final IBlockState LAVA = Blocks.LAVA.getDefaultState();
 	protected static final IBlockState GRAVEL = Blocks.GRAVEL.getDefaultState();
@@ -132,7 +131,7 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 								//                                }
 
 								if (d15 > 0.0D)
-									iblockstate = STONE;
+									iblockstate = Beneath.STONE;
 
 								int l2 = j2 + j1 * 4;
 								int i3 = i2 + l1 * 8;
@@ -168,8 +167,8 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 				boolean flag1 = gravelNoise[j + k * 16] + rand.nextDouble() * 0.2D > 0.0D;
 				int l = (int)(depthBuffer[j + k * 16] / 3.0D + 3.0D + rand.nextDouble() * 0.25D);
 				int i1 = -1;
-				IBlockState iblockstate = STONE;
-				IBlockState iblockstate1 = STONE;
+				IBlockState iblockstate = Beneath.STONE;
+				IBlockState iblockstate1 = Beneath.STONE;
 
 				for (int j1 = 255; j1 >= 0; --j1)
 					if (j1 < 255 - rand.nextInt(5) && j1 > rand.nextInt(5))
@@ -178,29 +177,29 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 
 						if (iblockstate2.getBlock() != null && iblockstate2.getMaterial() != Material.AIR)
 						{
-							if (iblockstate2.getBlock() == Blocks.STONE)
+							if (iblockstate2.getBlock() == Beneath.STONE.getBlock())
 								if (i1 == -1)
 								{
 									if (l <= 0)
 									{
 										iblockstate = AIR;
-										iblockstate1 = STONE;
+										iblockstate1 = Beneath.STONE;
 									}
 									else if (j1 >= i - 4 && j1 <= i + 1)
 									{
-										iblockstate = STONE;
-										iblockstate1 = STONE;
+										iblockstate = Beneath.STONE;
+										iblockstate1 = Beneath.STONE;
 
 										if (flag1)
 										{
 											iblockstate = GRAVEL;
-											iblockstate1 = STONE;
+											iblockstate1 = Beneath.STONE;
 										}
 
 										if (flag)
 										{
-											iblockstate = STONE;
-											iblockstate1 = STONE;
+											iblockstate = Beneath.STONE;
+											iblockstate1 = Beneath.STONE;
 										}
 									}
 
@@ -402,7 +401,7 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 
 					if(b) {
 
-						IBlockState state = Blocks.STONE.getDefaultState();
+						IBlockState state = Beneath.STONE;
 
 						for(int i3 = 0; i3 < 10 + extraHeight + rand.nextInt(5); i3++)
 							world.setBlockState(pos1.down(i3), state, 2);
@@ -446,7 +445,7 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 
 					if(b1) {
 
-						IBlockState state = Blocks.STONE.getDefaultState();
+						IBlockState state = Beneath.STONE;
 
 						for(int i3 = 0; i3 < 10 + extraHeight + rand.nextInt(5); i3++)
 							world.setBlockState(pos1.up(i3), state, 2);

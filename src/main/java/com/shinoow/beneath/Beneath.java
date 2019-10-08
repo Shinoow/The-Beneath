@@ -25,7 +25,9 @@ import com.shinoow.beneath.common.world.WorldProviderDeepDank;
 import com.shinoow.beneath.common.world.biome.BiomeDeepDank;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -80,7 +82,7 @@ public class Beneath {
 	static int startEntityId = 200;
 
 	public static int dim, darkTimer, darkDamage, dungeonChance, shadowSpawnWeight, lakeChance, stalactiteChance, stalagmiteChance;
-	public static String mode;
+	public static String mode, stoneBlock;
 	public static boolean internalOreGen, keepLoaded, dimTeleportation, disableMobSpawning, useCraftingRecipe, teleportTorches, useDecorator, shadowHand, otherModWorldgen;
 	public static double red, green, blue, damageMultiplier, healthMultiplier;
 	private static String[] craftingRecipe, fluidBlocks;
@@ -98,6 +100,8 @@ public class Beneath {
 
 	public static final ResourceLocation shadow_loot_table = LootTableList.register(new ResourceLocation(modid, "entities/shadow"));
 
+	public static IBlockState STONE;
+	
 	public static Logger LOGGER = LogManager.getLogger("The Beneath");
 
 	@EventHandler
@@ -150,6 +154,7 @@ public class Beneath {
 			BlockDecorationHandler.saveBlockDecoFile();
 		}
 		fluid_blocks = Arrays.stream(fluidBlocks).map(s -> ForgeRegistries.BLOCKS.getValue(new ResourceLocation(s))).collect(Collectors.toList());
+		updateTerrainBlock();
 		proxy.init();
 	}
 
@@ -169,6 +174,7 @@ public class Beneath {
 		if(eventArgs.getModID().equals("beneath")) {
 			syncConfig();
 			fluid_blocks = Arrays.stream(fluidBlocks).map(s -> ForgeRegistries.BLOCKS.getValue(new ResourceLocation(s))).collect(Collectors.toList());
+			updateTerrainBlock();
 		}
 	}
 
@@ -237,6 +243,8 @@ public class Beneath {
 		stalagmiteChance = cfg.get(Configuration.CATEGORY_GENERAL, "Stalagmite spawn chance", 20, "The chance that a stalagmite generates in The Beneath (higher number increases the chance, lower decreases it). Setting it to 0 stops stalagmite generation\\n[range: 0 ~ 100, default: 20]", 0, 100).getInt();
 		shadowHand = cfg.get(Configuration.CATEGORY_GENERAL, "Shadow Hands", true, "Toggles whether or not shadows will be able to drag you into the dark with their hands.").getBoolean();
 		otherModWorldgen = cfg.get(Configuration.CATEGORY_GENERAL, "Other Mod World Generation", false, "Toggles whether or not other mods should be able to interfere with the terrain generation of The Beneath.").getBoolean();
+		stoneBlock = cfg.get(Configuration.CATEGORY_GENERAL, "Terrain Block", "minecraft:stone", "This determines which block the terrain of The Beneath should be made out of. If you want it to be something other than stone, you can change this instead of jerry-rigging the block decorator to replace all stone."
+				+ "\nFormat is \"modid:name:meta\", where meta is optional\n"+TextFormatting.RED+"[Minecraft Restart Required]"+TextFormatting.RESET).getString();
 
 		darkTimer = MathHelper.clamp(darkTimer, 1, 10);
 		darkDamage = MathHelper.clamp(darkDamage, 2, 20);
@@ -292,6 +300,22 @@ public class Beneath {
 		return new ItemStack(item, 1, meta);
 	}
 
+	private void updateTerrainBlock() {
+		try {
+			String[] parts = stoneBlock.split(":");
+			if(parts.length == 3) {
+				STONE = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(parts[0], parts[1])).getStateFromMeta(Integer.valueOf(parts[2]));
+			} else {
+				STONE = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(stoneBlock)).getDefaultState();
+			}
+		} catch(Exception e) {
+			LOGGER.log(Level.ERROR, "{} is not a valid block, defaulting to minecraft:stone", stoneBlock);
+			STONE = Blocks.STONE.getDefaultState();
+		}
+		deep_dank.topBlock = STONE;
+		deep_dank.fillerBlock = STONE;
+	}
+	
 	private String getSupporterList(){
 		BufferedReader nameFile;
 		String names = "";

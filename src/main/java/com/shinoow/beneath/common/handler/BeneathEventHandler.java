@@ -64,7 +64,7 @@ public class BeneathEventHandler {
 								if(y > -1)
 									world.setBlockToAir(pos.add(x, y, z));
 								else if(world.isAirBlock(pos.add(x, y, z)))
-									world.setBlockState(pos.add(x, y, z), Blocks.STONE.getDefaultState());
+									world.setBlockState(pos.add(x, y, z), Blocks.COBBLESTONE.getDefaultState());
 					world.setBlockState(pos, Beneath.teleporter.getDefaultState());
 				}
 				TileEntity te = world.getTileEntity(pos);
