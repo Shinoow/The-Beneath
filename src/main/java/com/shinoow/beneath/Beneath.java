@@ -2,7 +2,10 @@ package com.shinoow.beneath;
 
 import java.io.*;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -82,7 +85,7 @@ public class Beneath {
 	public static double red, green, blue, damageMultiplier, healthMultiplier;
 	private static String[] craftingRecipe, fluidBlocks;
 
-	public static List<Block> fluid_blocks = Lists.newArrayList();
+	public static List<Block> fluid_blocks = new ArrayList<>();
 
 	public static Biome deep_dank;
 
@@ -146,8 +149,7 @@ public class Beneath {
 			BlockDecorationHandler.setupBlockDecoFile();
 			BlockDecorationHandler.saveBlockDecoFile();
 		}
-		for(String str : fluidBlocks)
-			fluid_blocks.add(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(str)));
+		fluid_blocks = Arrays.stream(fluidBlocks).map(s -> ForgeRegistries.BLOCKS.getValue(new ResourceLocation(s))).collect(Collectors.toList());
 		proxy.init();
 	}
 
@@ -164,8 +166,10 @@ public class Beneath {
 
 	@SubscribeEvent
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
-		if(eventArgs.getModID().equals("beneath"))
+		if(eventArgs.getModID().equals("beneath")) {
 			syncConfig();
+			fluid_blocks = Arrays.stream(fluidBlocks).map(s -> ForgeRegistries.BLOCKS.getValue(new ResourceLocation(s))).collect(Collectors.toList());
+		}
 	}
 
 	@SubscribeEvent
