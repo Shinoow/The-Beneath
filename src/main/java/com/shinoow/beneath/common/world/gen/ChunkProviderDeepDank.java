@@ -28,6 +28,11 @@ import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.feature.WorldGenBush;
 import net.minecraft.world.gen.feature.WorldGenDungeons;
 import net.minecraft.world.gen.feature.WorldGenLakes;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.event.terraingen.*;
+import net.minecraftforge.event.terraingen.InitMapGenEvent.EventType;
+import net.minecraftforge.fml.common.eventhandler.Event;
 
 public class ChunkProviderDeepDank implements IChunkGenerator
 {
@@ -53,7 +58,7 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 	public NoiseGeneratorOctaves depthNoise;
 	private final WorldGenBush brownMushroomFeature = new WorldGenBush(Blocks.BROWN_MUSHROOM);
 	private final WorldGenBush redMushroomFeature = new WorldGenBush(Blocks.RED_MUSHROOM);
-	private MapGenBase genDankCaves = new MapGenCavesDeepDank();
+	private MapGenBase genDankCaves;
 	double[] noiseData1;
 	double[] noiseData2;
 	double[] noiseData3;
@@ -71,18 +76,22 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 		netherrackExculsivityNoiseGen = new NoiseGeneratorOctaves(rand, 4);
 		scaleNoise = new NoiseGeneratorOctaves(rand, 16);
 		depthNoise = new NoiseGeneratorOctaves(rand, 16);
+		genDankCaves = new MapGenCavesDeepDank();
 		worldIn.setSeaLevel(63);
 
-		net.minecraftforge.event.terraingen.InitNoiseGensEvent.ContextHell ctx =
-				new net.minecraftforge.event.terraingen.InitNoiseGensEvent.ContextHell(lperlinNoise1, lperlinNoise2, perlinNoise1, slowsandGravelNoiseGen, netherrackExculsivityNoiseGen, scaleNoise, depthNoise);
-		ctx = net.minecraftforge.event.terraingen.TerrainGen.getModdedNoiseGenerators(worldIn, rand, ctx);
-		lperlinNoise1 = ctx.getLPerlin1();
-		lperlinNoise2 = ctx.getLPerlin2();
-		perlinNoise1 = ctx.getPerlin();
-		slowsandGravelNoiseGen = ctx.getPerlin2();
-		netherrackExculsivityNoiseGen = ctx.getPerlin3();
-		scaleNoise = ctx.getScale();
-		depthNoise = ctx.getDepth();
+		if(Beneath.otherModWorldgen) {
+			InitNoiseGensEvent.ContextHell ctx =
+					new InitNoiseGensEvent.ContextHell(lperlinNoise1, lperlinNoise2, perlinNoise1, slowsandGravelNoiseGen, netherrackExculsivityNoiseGen, scaleNoise, depthNoise);
+			ctx = TerrainGen.getModdedNoiseGenerators(worldIn, rand, ctx);
+			lperlinNoise1 = ctx.getLPerlin1();
+			lperlinNoise2 = ctx.getLPerlin2();
+			perlinNoise1 = ctx.getPerlin();
+			slowsandGravelNoiseGen = ctx.getPerlin2();
+			netherrackExculsivityNoiseGen = ctx.getPerlin3();
+			scaleNoise = ctx.getScale();
+			depthNoise = ctx.getDepth();
+			genDankCaves = TerrainGen.getModdedMapGen(genDankCaves, EventType.CAVE);
+		}
 	}
 
 	public void prepareHeights(int p_185936_1_, int p_185936_2_, ChunkPrimer primer)
@@ -154,7 +163,7 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 
 	public void buildSurfaces(int p_185937_1_, int p_185937_2_, ChunkPrimer primer)
 	{
-		if (!net.minecraftforge.event.ForgeEventFactory.onReplaceBiomeBlocks(this, p_185937_1_, p_185937_2_, primer, world)) return;
+		if (!ForgeEventFactory.onReplaceBiomeBlocks(this, p_185937_1_, p_185937_2_, primer, world)) return;
 		int i = world.getSeaLevel() + 1;
 		slowsandNoise = slowsandGravelNoiseGen.generateNoiseOctaves(slowsandNoise, p_185937_1_ * 16, p_185937_2_ * 16, 0, 16, 16, 1, 0.03125D, 0.03125D, 1.0D);
 		gravelNoise = slowsandGravelNoiseGen.generateNoiseOctaves(gravelNoise, p_185937_1_ * 16, 109, p_185937_2_ * 16, 16, 1, 16, 0.03125D, 1.0D, 0.03125D);
@@ -249,9 +258,9 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 
 	private double[] getHeights(double[] p_73164_1_, int p_73164_2_, int p_73164_3_, int p_73164_4_, int p_73164_5_, int p_73164_6_, int p_73164_7_)
 	{
-		net.minecraftforge.event.terraingen.ChunkGeneratorEvent.InitNoiseField event = new net.minecraftforge.event.terraingen.ChunkGeneratorEvent.InitNoiseField(this, p_73164_1_, p_73164_2_, p_73164_3_, p_73164_4_, p_73164_5_, p_73164_6_, p_73164_7_);
-		net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);
-		if (event.getResult() == net.minecraftforge.fml.common.eventhandler.Event.Result.DENY) return event.getNoisefield();
+		ChunkGeneratorEvent.InitNoiseField event = new ChunkGeneratorEvent.InitNoiseField(this, p_73164_1_, p_73164_2_, p_73164_3_, p_73164_4_, p_73164_5_, p_73164_6_, p_73164_7_);
+		MinecraftForge.EVENT_BUS.post(event);
+		if (event.getResult() == Event.Result.DENY) return event.getNoisefield();
 
 		if(p_73164_1_ == null)
 			p_73164_1_ = new double[p_73164_5_ * p_73164_6_ * p_73164_7_];
@@ -371,14 +380,14 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 	{
 		BlockFalling.fallInstantly = true;
 		if(Beneath.otherModWorldgen)
-			net.minecraftforge.event.ForgeEventFactory.onChunkPopulate(true, this, world, rand, x, z, false);
+			ForgeEventFactory.onChunkPopulate(true, this, world, rand, x, z, false);
 		int i = x * 16;
 		int j = z * 16;
 		BlockPos blockpos = new BlockPos(i, 0, j);
 
 		if(Beneath.otherModWorldgen){
-			net.minecraftforge.event.ForgeEventFactory.onChunkPopulate(false, this, world, rand, x, z, false);
-			net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.terraingen.DecorateBiomeEvent.Pre(world, rand, blockpos));
+			ForgeEventFactory.onChunkPopulate(false, this, world, rand, x, z, false);
+			MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Pre(world, rand, blockpos));
 		}
 
 		if(Beneath.stalactiteChance > 0)
@@ -469,7 +478,7 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 				}
 			}
 
-		if (net.minecraftforge.event.terraingen.TerrainGen.decorate(world, rand, blockpos, net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.SHROOM))
+		if (TerrainGen.decorate(world, rand, blockpos, DecorateBiomeEvent.Decorate.EventType.SHROOM))
 		{
 			if (rand.nextBoolean())
 				brownMushroomFeature.generate(world, rand, blockpos.add(rand.nextInt(16) + 8, rand.nextInt(256), rand.nextInt(16) + 8));
@@ -488,7 +497,7 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 				}
 
 		if(Beneath.dungeonChance > 0)
-			if(net.minecraftforge.event.terraingen.TerrainGen.populate(this, world, rand, x, z, false, net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType.DUNGEON))
+			if(TerrainGen.populate(this, world, rand, x, z, false, PopulateChunkEvent.Populate.EventType.DUNGEON))
 				for(int j2 = 0; j2 < Beneath.dungeonChance; ++j2)
 				{
 					int i3 = rand.nextInt(16) + 8;
@@ -524,7 +533,7 @@ public class ChunkProviderDeepDank implements IChunkGenerator
 			}
 
 		if(Beneath.otherModWorldgen)
-			net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.terraingen.DecorateBiomeEvent.Post(world, rand, blockpos));
+			MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Post(world, rand, blockpos));
 
 		BlockFalling.fallInstantly = false;
 	}
