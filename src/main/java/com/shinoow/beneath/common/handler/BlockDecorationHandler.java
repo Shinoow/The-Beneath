@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import com.google.common.collect.Streams;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.shinoow.beneath.Beneath;
 import com.shinoow.beneath.common.util.JsonHelper;
 
 import net.minecraft.init.Blocks;
@@ -22,8 +23,16 @@ public class BlockDecorationHandler {
 
 		if(!f.exists())
 			generateDefault(f);
-		else
-			blockdeco = Streams.stream(JsonHelper.ReadArrayFromFile(f)).filter(e -> e != null && e.isJsonObject()).map(e -> new OreEntry(e.getAsJsonObject())).collect(Collectors.toList());
+		else {
+			try {
+				blockdeco = Streams.stream(JsonHelper.ReadArrayFromFile(f)).filter(e -> e != null && e.isJsonObject()).map(e -> new OreEntry(e.getAsJsonObject())).collect(Collectors.toList());
+			}
+			catch(Exception e) {
+				Beneath.LOGGER.error("An error occurred while reading blockdeco.json, will use the default values instead", e);
+				generateDefault(f);
+			}
+		}
+			
 	}
 
 	public static void saveBlockDecoFile(){
